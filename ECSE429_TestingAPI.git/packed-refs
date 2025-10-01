@@ -1,9 +1,0 @@
-# pack-refs with: peeled fully-peeled sorted 
-e366a9262a7ee9ac00b0965c571d4b87c1b12c45 refs/heads/main
-e366a9262a7ee9ac00b0965c571d4b87c1b12c45 refs/remotes/origin/HEAD
-2767a9ffef3dbd431e5c2493d8929311d48831af refs/remotes/origin/christina_files
-efaf971374a49996ce061b168936eda92fa8f808 refs/remotes/origin/hadi
-8070790f32bd62cc4602c6dce265570c6e8affdb refs/remotes/origin/jar-setup
-e366a9262a7ee9ac00b0965c571d4b87c1b12c45 refs/remotes/origin/main
-20fbb9fdf26bde7a43e134de6e09f16f0b3cbdc2 refs/remotes/origin/mustafain-tests
-ca8e679c939716f85405467f1ff346806c6d1f80 refs/remotes/origin/sharon_files
