@@ -1,11 +1,10 @@
-package examples;
+package JSONEndpoints.todos;
 
 import org.junit.jupiter.api.Test;
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
-public class example {
-
+public class Session1 {
     private static final String BASE_URL = "http://localhost:4567";
 
     @Test
@@ -15,9 +14,8 @@ public class example {
                 when().
                 get("/todos").
                 then().
-                statusCode(200).              // ✅ Expect HTTP 200 OK
-                body("size()", greaterThan(0)); // ✅ Expect at least 1 todo from startup data
+                statusCode(200).
+                body("size()", greaterThan(0));
     }
-
 
 }
