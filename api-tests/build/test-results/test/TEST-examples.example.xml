@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="examples.example" tests="1" skipped="0" failures="0" errors="0" timestamp="2025-10-01T15:43:49" hostname="Clementines-MacBook-Air-2.local" time="1.091">
-  <properties/>
-  <testcase name="testGetTodos()" classname="examples.example" time="1.091"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
