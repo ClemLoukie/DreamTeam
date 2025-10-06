@@ -1,10 +1,10 @@
-package examples;
+package JSONEndpoints.projects;
 
 import org.junit.jupiter.api.Test;
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
-public class example {
+public class projectCategoryRelationshipEndpoints {
 
     private static final String BASE_URL = "http://localhost:4567";
 
