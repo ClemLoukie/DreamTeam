@@ -9,7 +9,10 @@ repositories {
 dependencies {
         // JUnit 5
         testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
-        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
+
+        // FIX for Deprecation Warning: Changed from testRuntimeOnly to testImplementation
+        testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
+
         testImplementation 'org.junit.jupiter:junit-jupiter-params:5.10.0'
 
         // REST Assured
