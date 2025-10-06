@@ -12,7 +12,7 @@ public class ProjectEndpointTest {
     private static final String BASE_URL = "http://localhost:4567";
     private Process serverProcess;
 
-    @BeforeAll
+    @BeforeEach
     void startServer() throws IOException, InterruptedException {
         String jarPath = System.getProperty("user.dir") + "/runTodoManagerRestAPI-1.5.5.jar";
         serverProcess = new ProcessBuilder("java", "-jar", jarPath)
@@ -36,7 +36,7 @@ public class ProjectEndpointTest {
         }
     }
 
-    @AfterAll
+    @AfterEach
     void stopServer() {
         try {
             given().baseUri(BASE_URL).get("/shutdown");
@@ -46,10 +46,8 @@ public class ProjectEndpointTest {
         }
     }
 
-    // We do not reset the database as we want to test the same exploratory conditions as
-    // the exploratory testing
+    // return all the instances of project
     @Test
-    @Order(1)
     void testGetProjectsWithInitialConditionOfOneProject() {
         given().
                 baseUri(BASE_URL).
@@ -59,9 +57,42 @@ public class ProjectEndpointTest {
                 body("size()", equalTo(1));
     }
 
+    // return all project headers
     @Test
-    @Order(2)
-    void testCreateProjectWithTitle() {
+    void testGetProjectHeaders() {
+        given().
+                baseUri(BASE_URL).
+                when().
+                head("/projects").
+                then().
+                statusCode(200)
+                .header("Content-Type", equalTo("application/json"))
+                .header("Transfer-Encoding", equalTo("chunked"));
+    }
+
+
+    // create project without a ID using the field values in the body of the message
+    // Undocumented capability
+    @Test
+    void testCreateProjectWithNoBody() {
+        given().
+                baseUri(BASE_URL).
+                header("Content-Type", "application/json").
+                when().
+                post("/projects").
+                then().
+                statusCode(201).
+                body("title", equalTo("")).
+                body("description", equalTo("")).
+                body("completed", equalTo("false")).
+                body("active", equalTo("false")).
+                body("id" , equalTo("2"));
+
+    }
+
+    // create project without a ID using the field values in the body of the message
+    @Test
+    void testCreateProjectWithBody() {
         String requestBody = """
         {
             "title": "School",
@@ -80,60 +111,142 @@ public class ProjectEndpointTest {
                 body("title", equalTo("School")).
                 body("description", equalTo("Meeting for 429 group")).
                 body("completed", equalTo("false")).
-                body("active", equalTo("false"));
-                //body("id", equalTo("2")); // because there is only 1 entry
+                body("active", equalTo("false")).
+                body("id" , equalTo("2"));
+
     }
 
     @Test
-    @Order(3)
-    void testCreateProjectWithNoBody() {
+    void testPutProject() {
         given().
                 baseUri(BASE_URL).
                 header("Content-Type", "application/json").
                 when().
-                post("/projects").
+                put("/projects").
                 then().
-                statusCode(201).
-                body("title", equalTo("")).
-                body("description", equalTo("")).
-                body("completed", equalTo("false")).
-                body("active", equalTo("false"));
-                //body("id", equalTo("3")); // because there is only 1 entry
+                statusCode(405);
+
     }
 
     @Test
-    void deleteProjectActualBehaviour() {
-//        Response createResponse = given().
-//                baseUri(BASE_URL).
-//                when().
-//                get("/projects").
-//                then().statusCode(200).extract().response();
-//
-//        given().
-//                baseUri(BASE_URL).
-//                header("Content-Type", "application/json").
-//                when().
-//                delete("/projects/:id").
-//                then().
-//                statusCode(200).
-//                body("title", equalTo("")).
-//                body("description", equalTo("")).
-//                body("completed", equalTo("false")).
-//                body("active", equalTo("false")).
-//                body("id", equalTo("3")); // because there is only 1 entry
-//
-//        given().
-//                baseUri(BASE_URL).
-//                when().
-//                get("/projects").
-//                then().
-//                // API should return 404 Not Found for a deleted resource
-//                        statusCode(404);
+    void testDeleteProject() {
+        given().
+                baseUri(BASE_URL).
+                header("Content-Type", "application/json").
+                when().
+                delete("/projects").
+                then().
+                statusCode(405);
+
+    }
+
+
+    // return a specific instances of project using a id
+    @Test
+    void getExistentProjectByID() {
+
+        given()
+                .baseUri(BASE_URL)
+                .when()
+                .get("/projects/" + 1)
+                .then()
+                .statusCode(200);
+    }
+
+    //
+    @Test
+    void getNonExistentProjectByID() {
+
+        given()
+                .baseUri(BASE_URL)
+                .when()
+                .get("/projects/" + 100)
+                .then()
+                .statusCode(404);
     }
 
     @Test
-    void testGetProjectsWhenNone() {
+    void editExistentProjectByID() {
 
+        String requestBody = """
+        {
+            "title": "School",
+            "description": "Meeting for 429 group"
+        }
+    """;
+
+        given()
+                .baseUri(BASE_URL).
+                header("Content-Type", "application/json").
+                body(requestBody).
+                when()
+                .post("/projects/" + 1)
+                .then()
+                .statusCode(200).
+                body("title", equalTo("School")).
+                body("description", equalTo("Meeting for 429 group"));
     }
+
+    @Test
+    void editExistentProjectByIDNoBody() {
+
+        String requestBody = """
+        {
+        }
+    """;
+
+        given()
+                .baseUri(BASE_URL).
+                header("Content-Type", "application/json").
+                body(requestBody)
+                .when()
+                .post("/projects/" + 1)
+                .then()
+                .statusCode(200);
+    }
+
+    @Test
+    void editExistentProjectByIDPUT() {
+
+        String requestBody = """
+        {
+            "title": "School",
+            "description": "Meeting for 429 group"
+        }
+    """;
+
+        given()
+                .baseUri(BASE_URL)
+                .header("Content-Type", "application/json")
+                .body(requestBody)
+                .when()
+                .put("/projects/" + 1)
+                .then()
+                .statusCode(200).
+                body("title", equalTo("School")).
+                body("description", equalTo("Meeting for 429 group"));
+    }
+
+    // delete a specific instances of project using a id
+    @Test
+    void deleteProject() {
+
+        // Delete
+        given()
+                .baseUri(BASE_URL)
+                .when()
+                .delete("/projects/" + 1) // testing deleting the original entry
+                .then()
+                .statusCode(is(200));
+
+        // Is project gone?
+        given()
+                .baseUri(BASE_URL)
+                .when()
+                .get("/projects/" + 1)
+                .then()
+                .statusCode(404);
+    }
+
 
 }
