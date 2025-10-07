@@ -119,7 +119,7 @@ public class CategoryEndpointTests {
 
 	@DisplayName("CAPABILITY: Retrieve existing category by ID")
     	@Test
-    	void testGetCategoryByIDBAD() {
+    	void testGetCategoryByID() {
         	given()
                 .baseUri(BASE_URL)
                 .when()
@@ -286,7 +286,7 @@ public class CategoryEndpointTests {
 
     @DisplayName("ERROR: double delete")
     @Test
-    void testDeleteTodo() {
+    void testDeleteTodoBAD() {
         // Create a temporary category
         String requestBody = """
         {
