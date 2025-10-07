@@ -7,7 +7,7 @@ import java.io.IOException;
 
 @TestMethodOrder(MethodOrderer.Random.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class CategoryEndpointTests {
+public class CategoriesEndpointTests {
     private static final String BASE_URL = "http://localhost:4567";
     private Process serverProcess;
 
@@ -72,16 +72,7 @@ public class CategoryEndpointTests {
                 .body("size()", equalTo(1));
     }
 
-    @DisplayName("BUG: when using head on invalid id still returns")
-    @Test
-    void testGetCategoryHeadersBug() {
-        given().
-                baseUri(BASE_URL).
-                when().
-                head("/categories").
-                then().
-                statusCode(200);
-    }
+
 
     @DisplayName("CAPABILITY: POST to categories")
     // make a new category with post
@@ -101,14 +92,35 @@ public class CategoryEndpointTests {
                 post("/categories").
                 then().
                 statusCode(201).
-                body("title", equalTo("r sint occaecat cupi")).
-                body("description", equalTo("ur sint occaecat cup"));
+		body("title", equalTo("r sint occaecat cupi")).
+		body("description", equalTo("ur sint occaecat cup"));
     }
 
-    @DisplayName("CAPABILITY: Retrieve existing category by ID")
+    @DisplayName("ERROR: POST with invalid data")
+    // make a new category with post
     @Test
-    void testGetCategoryByID() {
-        given()
+    void testPOSTCategoriesBAD() {
+        String requestBody = """
+        {
+            "id" : "1"
+            "title": "r sint occaecat cupi",
+            "description": "ur sint occaecat cup"
+        }
+    """;
+        given().
+                baseUri(BASE_URL).
+                when().
+                body(requestBody).
+                when().
+                post("/categories").
+                then().
+                statusCode(400);
+    }
+
+	@DisplayName("CAPABILITY: Retrieve existing category by ID")
+    	@Test
+    	void testGetCategoryByIDBAD() {
+        	given()
                 .baseUri(BASE_URL)
                 .when()
                 .get("/categories/1")
@@ -116,7 +128,41 @@ public class CategoryEndpointTests {
                 .statusCode(200);
     }
 
+    @DisplayName("ERROR: Retrieve existing category from bad ID")
+    @Test
+    void testGetCategoryByIDBAD() {
+        given()
+                .baseUri(BASE_URL)
+                .when()
+                .get("/categories/0")
+                .then()
+                .statusCode(404);
+    }
 
+    @DisplayName("Capability: get header data from an id")
+    @Test
+    void testGetCategoryHeadersBug() {
+        given().
+                baseUri(BASE_URL).
+                when().
+                head("/categories/1").
+                then().
+                statusCode(200);
+    }
+
+    @DisplayName("BUG: when using head on invalid id still returns")
+    @Test
+    void testGetCategoryHeadersBug() {
+        given().
+                baseUri(BASE_URL).
+                when().
+                head("/categories/0").
+                then().
+                statusCode(200);
+    }
+
+
+	
     @DisplayName("CAPABILITY: Edit existing category using POST /categories/:id")
     @Test
     void testEditCategoryByID() {
@@ -137,6 +183,26 @@ public class CategoryEndpointTests {
                 .statusCode(200)
                 .body("title", equalTo("Updated"))
                 .body("description", equalTo("Updated"));
+    }
+
+    @DisplayName("ERROR: Edit invalid category using POST /categories/:id")
+    @Test
+    void testEditCategoryByIDBAD() {
+        String requestBody = """
+        {
+            "title": "Updated",
+            "description": "Updated"
+        }
+        """;
+
+        given()
+                .baseUri(BASE_URL)
+                .header("Content-Type", "application/json")
+                .body(requestBody)
+                .when()
+                .post("/categories/0")
+                .then()
+                .statusCode(404);
     }
 
     @DisplayName("CAPABILITY: Edit existing category using PUT /categories/:id")
@@ -160,6 +226,27 @@ public class CategoryEndpointTests {
                 .body("title", equalTo("Updated PUT"))
                 .body("description", equalTo("Updated PUT"));
     }
+
+    DisplayName("ERROR: Edit invalid category using PUT /categories/:id")
+    @Test
+    void testEditCategoryByIDPUTBAD() {
+        String requestBody = """
+        {
+            "title": "Updated PUT",
+            "description": "Updated PUT"
+        }
+        """;
+
+        given()
+                .baseUri(BASE_URL)
+                .header("Content-Type", "application/json")
+                .body(requestBody)
+                .when()
+                .put("/categories/0")
+                .then()
+                .statusCode(404);
+    }
+
 
     @DisplayName("CAPABILITY: Delete existing category and confirm it no longer exists")
     @Test
@@ -197,6 +284,42 @@ public class CategoryEndpointTests {
                 .statusCode(404);
     }
 
+    @DisplayName("ERROR: double delete")
+    @Test
+    void testDeleteTodo() {
+        // Create a temporary category
+        String requestBody = """
+        {
+            "title": "To die"
+        }
+        """;
+        String id = given()
+                .baseUri(BASE_URL)
+                .header("Content-Type", "application/json")
+                .body(requestBody)
+                .when()
+                .post("/categories")
+                .then()
+                .statusCode(201)
+                .extract()
+                .path("id");
+
+        // Delete and confirm
+        given()
+                .baseUri(BASE_URL)
+                .when()
+                .delete("/categories/" + id)
+                .then()
+                .statusCode(200);
+
+        given()
+                .baseUri(BASE_URL)
+                .when()
+                .delete("/categories/" + id)
+                .then()
+                .statusCode(404);
+    }
+
     @DisplayName("ERROR CASE: DELETE on /categories (without ID) returns 405")
     @Test
     void testDeleteOnCategoriesRoot() {
@@ -218,6 +341,30 @@ public class CategoryEndpointTests {
                 .then()
                 .statusCode(404);
     }
+    @DisplayName("ERROR CASE: invalid syntax JSON payload - 400 Bad Request")
+    @Test
+    void testInvalidSyntaxJSON() {
+        String requestBody = """
+            {
+                "title ": "Bad data
+            """;
+
+        given()
+                .baseUri(BASE_URL)
+                .header("Content-Type", "application/json")
+                .body(requestBody)
+                .when()
+                .post("/categoriess")
+                .then()
+                .statusCode(400);
+    }
+
+
+
+
+
+
+
 
 
 }
