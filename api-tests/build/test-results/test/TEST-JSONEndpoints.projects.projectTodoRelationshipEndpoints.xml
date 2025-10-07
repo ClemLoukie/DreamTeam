@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="JSONEndpoints.projects.projectTodoRelationshipEndpoints" tests="1" skipped="0" failures="0" errors="0" timestamp="2025-10-05T21:46:14" hostname="Clementines-MacBook-Air-2.local" time="0.026">
-  <properties/>
-  <testcase name="testGetTodos()" classname="JSONEndpoints.projects.projectTodoRelationshipEndpoints" time="0.026"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>

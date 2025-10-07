@@ -7,7 +7,7 @@ import static org.hamcrest.Matchers.*;
 import java.io.IOException;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class ProjectEndpointTest {
+public class ProjectEndpointTests {
 
     private static final String BASE_URL = "http://localhost:4567";
     private Process serverProcess;
@@ -46,6 +46,7 @@ public class ProjectEndpointTest {
         }
     }
 
+    @DisplayName("CAPABILITY: Get all projects when there is one project")
     // return all the instances of project
     @Test
     void testGetProjectsWithInitialConditionOfOneProject() {
@@ -57,6 +58,7 @@ public class ProjectEndpointTest {
                 body("size()", equalTo(1));
     }
 
+    @DisplayName("CAPABILITY: Retrieve headers for all projects")
     // return all project headers
     @Test
     void testGetProjectHeaders() {
@@ -71,6 +73,7 @@ public class ProjectEndpointTest {
     }
 
 
+    @DisplayName("BUG: Create project with no body still succeeds (returns default empty fields)")
     // create project without a ID using the field values in the body of the message
     // Undocumented capability
     @Test
@@ -90,6 +93,7 @@ public class ProjectEndpointTest {
 
     }
 
+    @DisplayName("CAPABILITY: Create project with valid JSON body")
     // create project without a ID using the field values in the body of the message
     @Test
     void testCreateProjectWithBody() {
@@ -116,6 +120,28 @@ public class ProjectEndpointTest {
 
     }
 
+    @DisplayName("ERROR CASE: Create project with id - error code 400")
+    // create project without a ID using the field values in the body of the message
+    @Test
+    void testCreateProjectWithIdInBody() {
+        String requestBody = """
+        {
+            "id":"5"
+        }
+    """;
+
+        given().
+                baseUri(BASE_URL).
+                header("Content-Type", "application/json").
+                body(requestBody).
+                when().
+                post("/projects").
+                then().
+                statusCode(400);
+
+    }
+
+    @DisplayName("ERROR CASE: PUT on /projects (without ID) not allowed — expect 405")
     @Test
     void testPutProject() {
         given().
@@ -128,6 +154,7 @@ public class ProjectEndpointTest {
 
     }
 
+    @DisplayName("ERROR CASE: DELETE on /projects (without ID) not allowed — expect 405")
     @Test
     void testDeleteProject() {
         given().
@@ -140,7 +167,34 @@ public class ProjectEndpointTest {
 
     }
 
+    @DisplayName("CAPABILITY: Retrieve header for a project by id")
+    // return all project headers
+    @Test
+    void testGetProjectHeaderById() {
+        given().
+                baseUri(BASE_URL).
+                when().
+                head("/projects/1").
+                then().
+                statusCode(200)
+                .header("Content-Type", equalTo("application/json"))
+                .header("Transfer-Encoding", equalTo("chunked"));
+    }
 
+    @DisplayName("BUG: Retrieve header for a project by non existent id returns 200")
+    // return all project headers
+    @Test
+    void testGetProjectHeaderByNonExsitentId() {
+        given().
+                baseUri(BASE_URL).
+                when().
+                head("/projects/1").
+                then().
+                statusCode(200);
+    }
+
+
+    @DisplayName("CAPABILITY: Retrieve existing project by ID (GET /projects/:id)")
     // return a specific instances of project using a id
     @Test
     void getExistentProjectByID() {
@@ -153,7 +207,7 @@ public class ProjectEndpointTest {
                 .statusCode(200);
     }
 
-    //
+    @DisplayName("ERROR CASE: Retrieve non-existent project by ID returns 404")
     @Test
     void getNonExistentProjectByID() {
 
@@ -165,6 +219,7 @@ public class ProjectEndpointTest {
                 .statusCode(404);
     }
 
+    @DisplayName("CAPABILITY: Edit existing project using POST /projects/:id")
     @Test
     void editExistentProjectByID() {
 
@@ -187,6 +242,7 @@ public class ProjectEndpointTest {
                 body("description", equalTo("Meeting for 429 group"));
     }
 
+    @DisplayName("BUG: Edit project with empty JSON body still returns 200 instead of error")
     @Test
     void editExistentProjectByIDNoBody() {
 
@@ -205,6 +261,28 @@ public class ProjectEndpointTest {
                 .statusCode(200);
     }
 
+    @DisplayName("ERROR CASE: Edit non existent project using POST /projects/:id")
+    @Test
+    void editNonExistentProjectByID() {
+
+        String requestBody = """
+        {
+            "title": "School",
+            "description": "Meeting for 429 group"
+        }
+    """;
+
+        given()
+                .baseUri(BASE_URL).
+                header("Content-Type", "application/json").
+                body(requestBody).
+                when()
+                .post("/projects/" + 500)
+                .then()
+                .statusCode(404);
+    }
+
+    @DisplayName("CAPABILITY: Edit existing project using PUT /projects/:id")
     @Test
     void editExistentProjectByIDPUT() {
 
@@ -227,6 +305,47 @@ public class ProjectEndpointTest {
                 body("description", equalTo("Meeting for 429 group"));
     }
 
+    @DisplayName("BUG: Edit existing project using PUT with empty json body still returns 200 instead of error")
+    @Test
+    void editExistentProjectByIDPUTNoData() {
+
+        String requestBody = """
+        {
+        }
+    """;
+
+        given()
+                .baseUri(BASE_URL)
+                .header("Content-Type", "application/json")
+                .body(requestBody)
+                .when()
+                .put("/projects/" + 1)
+                .then()
+                .statusCode(200);
+    }
+
+    @DisplayName("ERROR CASE: Edit non existent project using PUT /projects/:id")
+    @Test
+    void editNonExistentProjectByIDPUT() {
+
+        String requestBody = """
+        {
+            "title": "School",
+            "description": "Meeting for 429 group"
+        }
+    """;
+
+        given()
+                .baseUri(BASE_URL)
+                .header("Content-Type", "application/json")
+                .body(requestBody)
+                .when()
+                .put("/projects/" + 500)
+                .then()
+                .statusCode(404);
+    }
+
+    @DisplayName("CAPABILITY: Delete existing project and confirm it no longer exists")
     // delete a specific instances of project using a id
     @Test
     void deleteProject() {
@@ -246,6 +365,95 @@ public class ProjectEndpointTest {
                 .get("/projects/" + 1)
                 .then()
                 .statusCode(404);
+    }
+
+    @DisplayName("ERROR CASE: Delete a non existent project - 404 not found")
+    @Test
+    void deleteProjectTwice() {
+
+        // Delete
+        given()
+                .baseUri(BASE_URL)
+                .when()
+                .delete("/projects/" + 1) // testing deleting the original entry
+                .then()
+                .statusCode(is(200));
+
+        given()
+                .baseUri(BASE_URL)
+                .when()
+                .delete("/projects/" + 1)
+                .then()
+                .statusCode(is(404));
+    }
+
+    @DisplayName("ERROR CASE: JSON payload is malformed - 400 Bad Request")
+    @Test
+    void testCreateProjectWithMalformedJSON() {
+        String requestBody = """
+                    {
+                        "title": "School",
+                        "description": "Meeting for 429 group"
+                    
+                """;
+
+
+        given().
+                baseUri(BASE_URL).
+                header("Content-Type", "application/json").
+                body(requestBody).
+                when().
+                post("/projects").
+                then().
+                statusCode(400);
+
+    }
+
+    @DisplayName("ERROR CASE: XML payload is malformed - 400 Bad Request")
+    @Test
+    void testCreateProjectWithMalformedXML() {
+        String requestBody = """
+                    <title>hello<title>
+                """;
+
+
+        given().
+                baseUri(BASE_URL).
+                header("Content-Type", "application/xml").
+                body(requestBody).
+                when().
+                post("/projects").
+                then().
+                statusCode(400);
+
+    }
+
+    @DisplayName("CAPABILITY: Command-line style query ?title")
+    @Test
+    void testConfirmCommandLineCompound() {
+
+        String requestBody = """
+        {
+            "title": "School",
+            "description": "Meeting for 429 group",
+            "completed": false
+        }
+    """;
+
+        given().
+                baseUri(BASE_URL).
+                header("Content-Type", "application/json").
+                body(requestBody).
+                when().
+                post("/projects");
+
+        given().
+                baseUri(BASE_URL).
+                when().
+                get("/projects?title=School").
+                then().
+                statusCode(200).body("projects.title", everyItem(equalTo("School")));
+
     }
 
 
