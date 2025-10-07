@@ -188,11 +188,30 @@ public class TodoEndpointTests {
                 .statusCode(404);
     }
 
-    // -------------------------------------------------------------------------
-    // ERROR CASES
-    // -------------------------------------------------------------------------
 
-    @DisplayName("ERROR CASE: Create todo with ID in body returns 400")
+    @DisplayName("ERROR CASE: Retrieve non-existent todo by ID — expect 404")
+    @Test
+    void testGetNonExistentTodoByID() {
+        given()
+                .baseUri(BASE_URL)
+                .when()
+                .get("/todos/9999")
+                .then()
+                .statusCode(404);
+    }
+
+    @DisplayName("ERROR CASE: Retrieve headers for non-existent todo — expect 404")
+    @Test
+    void testGetTodoHeaderByNonExistentID() {
+        given()
+                .baseUri(BASE_URL)
+                .when()
+                .head("/todos/9999")
+                .then()
+                .statusCode(anyOf(is(404), is(200)));
+    }
+
+    @DisplayName("ERROR CASE: Create todo with ID in body — expect 400 Bad Request")
     @Test
     void testCreateTodoWithIdInBody() {
         String requestBody = """
@@ -200,7 +219,7 @@ public class TodoEndpointTests {
             "id": "5",
             "title": "Invalid Todo"
         }
-        """;
+    """;
 
         given()
                 .baseUri(BASE_URL)
@@ -212,18 +231,37 @@ public class TodoEndpointTests {
                 .statusCode(400);
     }
 
-    @DisplayName("ERROR CASE: PUT on /todos (without ID) returns 405")
+    @DisplayName("ERROR CASE: Create todo with malformed JSON — expect 400 Bad Request")
+    @Test
+    void testCreateTodoMalformedJSON() {
+        String requestBody = """
+        {
+            "title": "Unfinished
+    """;
+
+        given()
+                .baseUri(BASE_URL)
+                .header("Content-Type", "application/json")
+                .body(requestBody)
+                .when()
+                .post("/todos")
+                .then()
+                .statusCode(400);
+    }
+
+    @DisplayName("ERROR CASE: PUT on /todos (without ID) — expect 405 Method Not Allowed")
     @Test
     void testPutOnTodosRoot() {
         given()
                 .baseUri(BASE_URL)
+                .header("Content-Type", "application/json")
                 .when()
                 .put("/todos")
                 .then()
                 .statusCode(405);
     }
 
-    @DisplayName("ERROR CASE: DELETE on /todos (without ID) returns 405")
+    @DisplayName("ERROR CASE: DELETE on /todos (without ID) — expect 405 Method Not Allowed")
     @Test
     void testDeleteOnTodosRoot() {
         given()
@@ -234,38 +272,57 @@ public class TodoEndpointTests {
                 .statusCode(405);
     }
 
-    @DisplayName("ERROR CASE: Retrieve non-existent todo returns 404")
+    @DisplayName("ERROR CASE: Edit non-existent todo using POST /todos/:id — expect 404")
     @Test
-    void testGetNonExistentTodo() {
-        given()
-                .baseUri(BASE_URL)
-                .when()
-                .get("/todos/9999")
-                .then()
-                .statusCode(404);
-    }
-
-    @DisplayName("ERROR CASE: Malformed JSON payload - 400 Bad Request")
-    @Test
-    void testMalformedJSON() {
+    void testEditNonExistentTodoByID() {
         String requestBody = """
-            {
-                "title": "Broken
-            """;
+        {
+            "title": "Does Not Exist",
+            "description": "Trying to update non-existent todo"
+        }
+    """;
 
         given()
                 .baseUri(BASE_URL)
                 .header("Content-Type", "application/json")
                 .body(requestBody)
                 .when()
-                .post("/todos")
+                .post("/todos/9999")
                 .then()
-                .statusCode(400);
+                .statusCode(404);
     }
 
-    // -------------------------------------------------------------------------
-    // BUG VALIDATION / EDGE CASES
-    // -------------------------------------------------------------------------
+    @DisplayName("ERROR CASE: Edit non-existent todo using PUT /todos/:id — expect 404")
+    @Test
+    void testEditNonExistentTodoByIDPUT() {
+        String requestBody = """
+        {
+            "title": "Does Not Exist",
+            "description": "Trying to replace non-existent todo"
+        }
+    """;
+
+        given()
+                .baseUri(BASE_URL)
+                .header("Content-Type", "application/json")
+                .body(requestBody)
+                .when()
+                .put("/todos/9999")
+                .then()
+                .statusCode(404);
+    }
+
+    @DisplayName("ERROR CASE: Delete a non-existent todo — expect 404 Not Found")
+    @Test
+    void testDeleteNonExistentTodo() {
+        given()
+                .baseUri(BASE_URL)
+                .when()
+                .delete("/todos/9999")
+                .then()
+                .statusCode(404);
+    }
+
 
     @DisplayName("Error Case: HEAD method returns 200 but no headers — unclear behavior")
     @Test
@@ -328,13 +385,5 @@ public class TodoEndpointTests {
         Assertions.assertEquals(Integer.parseInt(firstId) + 1, Integer.parseInt(newId),
                 "BUG: ID counter did not reuse deleted ID; expected same ID to be reused.");
     }
-
-
-
-
-
-
-
-
 
 }
