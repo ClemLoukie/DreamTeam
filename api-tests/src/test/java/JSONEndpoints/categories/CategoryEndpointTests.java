@@ -150,7 +150,7 @@ public class CategoryEndpointTests {
                 statusCode(200);
     }
 
-    @DisplayName("BUG: when using head on invalid id still returns")
+    @DisplayName("ERROR: when using head on invalid does not return")
     @Test
     void testGetCategoryHeadersBug() {
         given().
@@ -158,7 +158,7 @@ public class CategoryEndpointTests {
                 when().
                 head("/categories/0").
                 then().
-                statusCode(200);
+                statusCode(404);
     }
 
 
