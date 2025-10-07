@@ -7,7 +7,7 @@ import java.io.IOException;
 
 @TestMethodOrder(MethodOrderer.Random.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class CategoriesEndpointTests {
+public class CategoryEndpointTests {
     private static final String BASE_URL = "http://localhost:4567";
     private Process serverProcess;
 
