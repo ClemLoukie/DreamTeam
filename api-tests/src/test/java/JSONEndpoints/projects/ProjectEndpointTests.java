@@ -6,6 +6,7 @@ import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 import java.io.IOException;
 
+@TestMethodOrder(MethodOrderer.Random.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ProjectEndpointTests {
 
@@ -91,6 +92,51 @@ public class ProjectEndpointTests {
                 body("active", equalTo("false")).
                 body("id" , equalTo("2"));
 
+    }
+
+    @DisplayName("BUG: When create project fails, the id still increments")
+    @Test
+    void testCreateFailedProjectsCausesIdIncrementation() {
+
+        // Create a first entry to get baseline ID
+        String id = given().
+                baseUri(BASE_URL).
+                header("Content-Type", "application/json").
+                when().
+                post("/projects").
+                then().
+                statusCode(201).
+                extract().
+                path("id");;
+
+        // fail at creating an entry
+
+        String requestBody = """
+        {
+            "glurb": "1"
+        }
+    """;
+
+        given().
+                baseUri(BASE_URL).
+                header("Content-Type", "application/json").
+                body(requestBody).
+                when().
+                post("/projects").
+                then().
+                statusCode(400);
+
+        //create new entry and assert id
+
+        // Create a first entry to get baseline ID
+        given().
+                baseUri(BASE_URL).
+                header("Content-Type", "application/json").
+                when().
+                post("/projects").
+                then().
+                statusCode(201).
+                body("id", equalTo(Integer.toString(Integer.parseInt(id)+2)));;
     }
 
     @DisplayName("CAPABILITY: Create project with valid JSON body")
