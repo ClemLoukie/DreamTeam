@@ -141,7 +141,7 @@ public class CategoryEndpointTests {
 
     @DisplayName("Capability: get header data from an id")
     @Test
-    void testGetCategoryHeaders() {
+    void testGetCategoryHeadersID() {
         given().
                 baseUri(BASE_URL).
                 when().
