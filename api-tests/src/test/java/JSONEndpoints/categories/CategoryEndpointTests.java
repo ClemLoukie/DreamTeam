@@ -227,7 +227,7 @@ public class CategoryEndpointTests {
                 .body("description", equalTo("Updated PUT"));
     }
 
-    DisplayName("ERROR: Edit invalid category using PUT /categories/:id")
+    @DisplayName("ERROR: Edit invalid category using PUT /categories/:id")
     @Test
     void testEditCategoryByIDPUTBAD() {
         String requestBody = """
