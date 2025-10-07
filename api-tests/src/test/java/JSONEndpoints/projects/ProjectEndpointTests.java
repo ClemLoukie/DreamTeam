@@ -139,8 +139,22 @@ public class ProjectEndpointTests {
 
     @DisplayName("CAPABILITY: Create project with valid JSON body")
     // create project without a ID using the field values in the body of the message
+    // proof of concept: ensuring no side effects are introduced
+
     @Test
     void testCreateProjectWithBody() {
+
+        // Obtain initial count of projects in database
+        int initialCount =
+                given()
+                        .baseUri(BASE_URL)
+                        .when()
+                        .get("/projects")
+                        .then()
+                        .statusCode(200)
+                        .extract()
+                        .path("projects.size()");
+
         String requestBody = """
         {
             "title": "School",
@@ -161,6 +175,22 @@ public class ProjectEndpointTests {
                 body("completed", equalTo("false")).
                 body("active", equalTo("false")).
                 body("id" , equalTo("2"));
+
+        // Obtain final count of projects in database
+
+        int finalCount =
+                given()
+                        .baseUri(BASE_URL)
+                        .when()
+                        .get("/projects")
+                        .then()
+                        .statusCode(200)
+                        .extract()
+                        .path("projects.size()");
+
+        // Ensure value is correct
+        Assertions.assertEquals(initialCount + 1, finalCount,
+                "Project list size should STRICTLY increase by 1 after creation");
 
     }
 
