@@ -1,13 +1,11 @@
 package JSONEndpoints.projects;
 
-import io.restassured.response.Response;
 import org.junit.jupiter.api.*;
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 import java.io.IOException;
 
 @TestMethodOrder(MethodOrderer.Random.class)
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ProjectEndpointTests {
 
     private static final String BASE_URL = "http://localhost:4567";
@@ -81,7 +79,7 @@ public class ProjectEndpointTests {
     void testCreateProjectWithNoBody() {
         given().
                 baseUri(BASE_URL).
-                header("Content-Type", "application/json").
+                contentType("application/json").
                 when().
                 post("/projects").
                 then().
@@ -101,7 +99,7 @@ public class ProjectEndpointTests {
         // Create a first entry to get baseline ID
         String id = given().
                 baseUri(BASE_URL).
-                header("Content-Type", "application/json").
+                contentType("application/json").
                 when().
                 post("/projects").
                 then().
@@ -119,7 +117,7 @@ public class ProjectEndpointTests {
 
         given().
                 baseUri(BASE_URL).
-                header("Content-Type", "application/json").
+                contentType("application/json").
                 body(requestBody).
                 when().
                 post("/projects").
@@ -131,7 +129,7 @@ public class ProjectEndpointTests {
         // Create a first entry to get baseline ID
         given().
                 baseUri(BASE_URL).
-                header("Content-Type", "application/json").
+                contentType("application/json").
                 when().
                 post("/projects").
                 then().
@@ -152,7 +150,7 @@ public class ProjectEndpointTests {
 
         given().
                 baseUri(BASE_URL).
-                header("Content-Type", "application/json").
+                contentType("application/json").
                 body(requestBody).
                 when().
                 post("/projects").
@@ -178,7 +176,7 @@ public class ProjectEndpointTests {
 
         given().
                 baseUri(BASE_URL).
-                header("Content-Type", "application/json").
+                contentType("application/json").
                 body(requestBody).
                 when().
                 post("/projects").
@@ -192,7 +190,7 @@ public class ProjectEndpointTests {
     void testPutProject() {
         given().
                 baseUri(BASE_URL).
-                header("Content-Type", "application/json").
+                contentType("application/json").
                 when().
                 put("/projects").
                 then().
@@ -205,7 +203,7 @@ public class ProjectEndpointTests {
     void testDeleteProject() {
         given().
                 baseUri(BASE_URL).
-                header("Content-Type", "application/json").
+                contentType("application/json").
                 when().
                 delete("/projects").
                 then().
@@ -278,7 +276,7 @@ public class ProjectEndpointTests {
 
         given()
                 .baseUri(BASE_URL).
-                header("Content-Type", "application/json").
+                contentType("application/json").
                 body(requestBody).
                 when()
                 .post("/projects/" + 1)
@@ -299,7 +297,7 @@ public class ProjectEndpointTests {
 
         given()
                 .baseUri(BASE_URL).
-                header("Content-Type", "application/json").
+                contentType("application/json").
                 body(requestBody)
                 .when()
                 .post("/projects/" + 1)
@@ -320,7 +318,7 @@ public class ProjectEndpointTests {
 
         given()
                 .baseUri(BASE_URL).
-                header("Content-Type", "application/json").
+                contentType("application/json").
                 body(requestBody).
                 when()
                 .post("/projects/" + 500)
@@ -341,7 +339,7 @@ public class ProjectEndpointTests {
 
         given()
                 .baseUri(BASE_URL)
-                .header("Content-Type", "application/json")
+                .contentType("application/json")
                 .body(requestBody)
                 .when()
                 .put("/projects/" + 1)
@@ -362,7 +360,7 @@ public class ProjectEndpointTests {
 
         given()
                 .baseUri(BASE_URL)
-                .header("Content-Type", "application/json")
+                .contentType("application/json")
                 .body(requestBody)
                 .when()
                 .put("/projects/" + 1)
@@ -383,7 +381,7 @@ public class ProjectEndpointTests {
 
         given()
                 .baseUri(BASE_URL)
-                .header("Content-Type", "application/json")
+                .contentType("application/json")
                 .body(requestBody)
                 .when()
                 .put("/projects/" + 500)
@@ -446,7 +444,7 @@ public class ProjectEndpointTests {
 
         given().
                 baseUri(BASE_URL).
-                header("Content-Type", "application/json").
+                contentType("application/json").
                 body(requestBody).
                 when().
                 post("/projects").
@@ -488,7 +486,7 @@ public class ProjectEndpointTests {
 
         given().
                 baseUri(BASE_URL).
-                header("Content-Type", "application/json").
+                contentType("application/json").
                 body(requestBody).
                 when().
                 post("/projects");

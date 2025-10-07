@@ -1,13 +1,11 @@
 package JSONEndpoints.todos;
 
-import io.restassured.response.Response;
 import org.junit.jupiter.api.*;
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 import java.io.IOException;
 
 @TestMethodOrder(MethodOrderer.Random.class)
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class TodoEndpointTests {
 
     private static final String BASE_URL = "http://localhost:4567";
@@ -86,7 +84,7 @@ public class TodoEndpointTests {
 
         given()
                 .baseUri(BASE_URL)
-                .header("Content-Type", "application/json")
+                .contentType("application/json")
                 .body(requestBody)
                 .when()
                 .post("/todos")
@@ -120,7 +118,7 @@ public class TodoEndpointTests {
 
         given()
                 .baseUri(BASE_URL)
-                .header("Content-Type", "application/json")
+                .contentType("application/json")
                 .body(requestBody)
                 .when()
                 .post("/todos/1")
@@ -142,7 +140,7 @@ public class TodoEndpointTests {
 
         given()
                 .baseUri(BASE_URL)
-                .header("Content-Type", "application/json")
+                .contentType("application/json")
                 .body(requestBody)
                 .when()
                 .put("/todos/1")
@@ -163,7 +161,7 @@ public class TodoEndpointTests {
         """;
         String id = given()
                 .baseUri(BASE_URL)
-                .header("Content-Type", "application/json")
+                .contentType("application/json")
                 .body(requestBody)
                 .when()
                 .post("/todos")
@@ -223,7 +221,7 @@ public class TodoEndpointTests {
 
         given()
                 .baseUri(BASE_URL)
-                .header("Content-Type", "application/json")
+                .contentType("application/json")
                 .body(requestBody)
                 .when()
                 .post("/todos")
@@ -241,7 +239,7 @@ public class TodoEndpointTests {
 
         given()
                 .baseUri(BASE_URL)
-                .header("Content-Type", "application/json")
+                .contentType("application/json")
                 .body(requestBody)
                 .when()
                 .post("/todos")
@@ -254,7 +252,7 @@ public class TodoEndpointTests {
     void testPutOnTodosRoot() {
         given()
                 .baseUri(BASE_URL)
-                .header("Content-Type", "application/json")
+                .contentType("application/json")
                 .when()
                 .put("/todos")
                 .then()
@@ -284,7 +282,7 @@ public class TodoEndpointTests {
 
         given()
                 .baseUri(BASE_URL)
-                .header("Content-Type", "application/json")
+                .contentType("application/json")
                 .body(requestBody)
                 .when()
                 .post("/todos/9999")
@@ -304,7 +302,7 @@ public class TodoEndpointTests {
 
         given()
                 .baseUri(BASE_URL)
-                .header("Content-Type", "application/json")
+                .contentType("application/json")
                 .body(requestBody)
                 .when()
                 .put("/todos/9999")
@@ -348,7 +346,7 @@ public class TodoEndpointTests {
 
         String firstId = given()
                 .baseUri(BASE_URL)
-                .header("Content-Type", "application/json")
+                .contentType("application/json")
                 .body(requestBody)
                 .when()
                 .post("/todos")
@@ -368,7 +366,7 @@ public class TodoEndpointTests {
         // Step 3: Create new todo
         String newId = given()
                 .baseUri(BASE_URL)
-                .header("Content-Type", "application/json")
+                .contentType("application/json")
                 .body(requestBody)
                 .when()
                 .post("/todos")

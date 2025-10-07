@@ -6,7 +6,6 @@ import static org.hamcrest.Matchers.*;
 import java.io.IOException;
 
 @TestMethodOrder(MethodOrderer.Random.class)
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class CategoryEndpointTests {
     private static final String BASE_URL = "http://localhost:4567";
     private Process serverProcess;
@@ -175,7 +174,7 @@ public class CategoryEndpointTests {
 
         given()
                 .baseUri(BASE_URL)
-                .header("Content-Type", "application/json")
+                .contentType("application/json")
                 .body(requestBody)
                 .when()
                 .post("/categories/1")
@@ -197,7 +196,7 @@ public class CategoryEndpointTests {
 
         given()
                 .baseUri(BASE_URL)
-                .header("Content-Type", "application/json")
+                .contentType("application/json")
                 .body(requestBody)
                 .when()
                 .post("/categories/0")
@@ -217,7 +216,7 @@ public class CategoryEndpointTests {
 
         given()
                 .baseUri(BASE_URL)
-                .header("Content-Type", "application/json")
+                .contentType("application/json")
                 .body(requestBody)
                 .when()
                 .put("/categories/1")
@@ -239,7 +238,7 @@ public class CategoryEndpointTests {
 
         given()
                 .baseUri(BASE_URL)
-                .header("Content-Type", "application/json")
+                .contentType("application/json")
                 .body(requestBody)
                 .when()
                 .put("/categories/0")
@@ -259,7 +258,7 @@ public class CategoryEndpointTests {
         """;
         String id = given()
                 .baseUri(BASE_URL)
-                .header("Content-Type", "application/json")
+                .contentType("application/json")
                 .body(requestBody)
                 .when()
                 .post("/categories")
@@ -295,7 +294,7 @@ public class CategoryEndpointTests {
         """;
         String id = given()
                 .baseUri(BASE_URL)
-                .header("Content-Type", "application/json")
+                .contentType("application/json")
                 .body(requestBody)
                 .when()
                 .post("/categories")
@@ -351,12 +350,12 @@ public class CategoryEndpointTests {
 
         given()
                 .baseUri(BASE_URL)
-                .header("Content-Type", "application/json")
+                .contentType("application/json")
                 .body(requestBody)
                 .when()
                 .post("/categoriess")
                 .then()
-                .statusCode(400);
+                .statusCode(404);
     }
 
 
