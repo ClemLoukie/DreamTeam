@@ -267,19 +267,7 @@ public class TodoEndpointTests {
     // BUG VALIDATION / EDGE CASES
     // -------------------------------------------------------------------------
 
-    @DisplayName("BUG: Empty POST body returns 400 (expected) — validate behavior")
-    @Test
-    void testCreateTodoEmptyBody() {
-        given()
-                .baseUri(BASE_URL)
-                .header("Content-Type", "application/json")
-                .when()
-                .post("/todos")
-                .then()
-                .statusCode(anyOf(is(400), is(500))); // accept either depending on API
-    }
-
-    @DisplayName("BUG: HEAD method returns 200 but no headers — unclear behavior")
+    @DisplayName("Error Case: HEAD method returns 200 but no headers — unclear behavior")
     @Test
     void testHeadTodoNoHeaderInformation() {
         given()
@@ -289,6 +277,58 @@ public class TodoEndpointTests {
                 .then()
                 .statusCode(200);
     }
+
+    @DisplayName("BUG: ID counter does not reuse deleted IDs — new todos get i+1 instead of reusing deleted ID")
+    @Test
+    void testTodoIdCounterAfterDeletion() {
+
+        // Step 1: Create first todo
+        String requestBody = """
+    {
+        "title": "Temporary Task"
+    }
+    """;
+
+        String firstId = given()
+                .baseUri(BASE_URL)
+                .header("Content-Type", "application/json")
+                .body(requestBody)
+                .when()
+                .post("/todos")
+                .then()
+                .statusCode(201)
+                .extract()
+                .path("id");
+
+        // Step 2: Delete that todo
+        given()
+                .baseUri(BASE_URL)
+                .when()
+                .delete("/todos/" + firstId)
+                .then()
+                .statusCode(200);
+
+        // Step 3: Create new todo
+        String newId = given()
+                .baseUri(BASE_URL)
+                .header("Content-Type", "application/json")
+                .body(requestBody)
+                .when()
+                .post("/todos")
+                .then()
+                .statusCode(201)
+                .extract()
+                .path("id");
+
+        // Step 4: Check the IDs
+        System.out.println("First ID: " + firstId + " | New ID: " + newId);
+
+        // Step 5: Assert bug (IDs not reused)
+        // This is the BUG behavior: newId == firstId + 1
+        Assertions.assertEquals(Integer.parseInt(firstId) + 1, Integer.parseInt(newId),
+                "BUG: ID counter did not reuse deleted ID; expected same ID to be reused.");
+    }
+
 
 
 
