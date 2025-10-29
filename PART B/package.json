@@ -1,0 +1,19 @@
+{
+  "name": "ecse429_project_b",
+  "version": "1.0.0",
+  "description": "story testing of REST Api",
+  "main": "index.js",
+  "scripts": {
+    "cucumber": "cucumber-js ./features -r ./steps --order random:765432"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "deep-equal-in-any-order": "^1.0.28"
+  },
+  "devDependencies": {
+    "@cucumber/cucumber": "^7.0.0-rc.0"
+  }
+}
