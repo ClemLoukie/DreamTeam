@@ -41,8 +41,8 @@ async function getTODOIdByTitle(todoTitle) {
   return response.body.todos[0].id;
 }
 
-async function getProjIdByCourseName(course) {
-  response = await chai
+async function getProjIdByTitle(course) {
+  const response = await chai
     .request(host)
     .get(projectsEndpoint)
     .query({ title: course });
@@ -85,7 +85,7 @@ module.exports = {
   categProjRelationship: categProjRelationship,
   categTodosRelationship: categTodosRelationship,
   getTODOIdByTitle,
-  getProjIdByCourseName,
+  getProjIdByTitle,
   getProjIdByDescription,
   getCategIdByTitle,
   returnCode,
