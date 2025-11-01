@@ -11,7 +11,8 @@
   "dependencies": {
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
-    "deep-equal-in-any-order": "^1.0.28"
+    "deep-equal-in-any-order": "^1.0.28",
+    "xml2js": "^0.6.2"
   },
   "devDependencies": {
     "@cucumber/cucumber": "^7.0.0-rc.0"
