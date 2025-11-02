@@ -5,8 +5,6 @@ const chaiHttp = require("chai-http");
 const utils = require("../TestUtil.js");
 const { Given, When, Then, After } = require("@cucumber/cucumber");
 const deepEqualInAnyOrder = require("deep-equal-in-any-order");
-const context = { response: null, idMap: {} };
-
 chai.use(chaiHttp);
 chai.use(deepEqualInAnyOrder);
 
@@ -16,6 +14,12 @@ const projsEndpoint = utils.projectsEndpoint;
 const todoProjRelationship = utils.todoProjRelationship;
 const getTODOIdByTitle = utils.getTODOIdByTitle;
 const getProjIdByTitle = utils.getProjIdByTitle;
+
+// shared test context exported to other step definition files
+const context = {
+  response: null,
+  idMap: {},
+};
 
 let returnCode = utils.returnCode;
 let errorMsg = utils.errorMessage;

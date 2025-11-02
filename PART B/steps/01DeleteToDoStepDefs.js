@@ -19,6 +19,16 @@ When("the TODO with id {int} is requested", async function (id) {
   context.response = await chai.request(host).get(`/todos/${rid}`);
 });
 
+When("the TODO with id {string} is deleted", async function (id) {
+  const rid = resolveId(id);
+  context.response = await chai.request(host).delete(`/todos/${rid}`);
+});
+
+When("the TODO with id {int} is deleted", async function (id) {
+  const rid = resolveId(id);
+  context.response = await chai.request(host).delete(`/todos/${rid}`);
+});
+
 Then("all existing TODOs are returned", async function () {
   expect(context.response).to.have.status(200);
   expect(context.response.body.todos).to.be.an("array");
@@ -48,4 +58,16 @@ Then("the TODO with id {int} is returned", async function (id) {
     ""
   ).toString();
   expect(actualId).to.equal(rid.toString());
+});
+
+Then("the TODO with id {int} no longer exists", async function (id) {
+  const rid = resolveId(id);
+  const res = await chai.request(host).get(`/todos/${rid}`);
+  expect(res).to.have.status(404);
+});
+
+Then("the TODO with id {string} no longer exists", async function (id) {
+  const rid = resolveId(id);
+  const res = await chai.request(host).get(`/todos/${rid}`);
+  expect(res).to.have.status(404);
 });
