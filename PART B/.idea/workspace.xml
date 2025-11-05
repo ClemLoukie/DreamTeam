@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="d6e5bbe1-5ae2-4096-9344-57e8af084bfd" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/features/Story10UpdateDoneStatusTodo.feature" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/features/Story11AddProjectToProjectList.feature" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/features/Story12DeleteProjectFromProjectList.feature" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/features/Story13UpdateProjectDescription.feature" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/features/Story14UpdateProjectActivityStatus.feature" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/features/Story15QueryProjects.feature" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/features/Story1CategoryCreation.feature" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/features/Story2ChangeCategoryWIthPOST.feature" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/features/Story3ChangeCategoryWithPUT.feature" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/features/Story4FindCategorybyID.feature" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/features/Story5DeleteCategories.feature" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/features/Story6CreateTodo.feature" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/features/Story7DeleteTodo.feature" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/features/Story8QueryTodo.feature" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/features/Story9UpdateDescriptionTodo.feature" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/steps/Story10StepDefs.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/steps/Story11StepDefs.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/steps/Story12StepDefs.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/steps/Story13StepDefs.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/steps/Story14StepDefs.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/steps/Story15StepDefs.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/steps/Story1StepDefs.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/steps/Story2StepDefs.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/steps/Story3StepDefs.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/steps/Story4StepDefs.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/steps/Story5StepDefs.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/steps/Story6StepDefs.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/steps/Story7StepDefs.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/steps/Story8StepDefs.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/steps/Story9StepDefs.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TestUtil.js" beforeDir="false" afterPath="$PROJECT_DIR$/TestUtil.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/Story1Paul_Todo_Create.feature" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/Story1ThomasCategoryCreation.feature" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/Story2Paul_Todo_Delete.feature" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/Story2ThomasChangeCategoryWIthPOST.feature" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/Story3Paul_Todo_Query.feature" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/Story3ThomasChange category with PUT.feature" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/Story4Paul_Todo_Update_description.feature" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/Story4ThomasFindCategorybyID.feature" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/Story5Paul_Todo_Update_donestatus.feature" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/Story5ThomasDeleteCategories.feature" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/Story_1CLEM_AddProjectToProjectList.feature" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/Story_2CLEM_DeleteProjectFromProjectList.feature" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/Story_3CLEM_UpdateProjectDescription.feature" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/Story_4CLEM_UpdateProjectActivityStatus.feature" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/Story_5CLEM_QueryProjects.feature" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/steps/01CreateToDoStepDefs.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/steps/01DeleteToDoStepDefs.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/steps/01QueryToDoStepDefs.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/steps/01UpdateToDoDescriptionStepDefs.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/steps/01UpdateToDoDonestatusStepDefs.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/steps/Story1ThomasStepDefs.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/steps/Story2ThomasStepDefs.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/steps/Story3ThomasStepDefs.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/steps/Story4ThomasStepDefs.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/steps/Story5ThomasStepDefs.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/steps/Story_1CLEM_StepDefs.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/steps/Story_2CLEM_StepDefs.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/steps/Story_3CLEM_StepDefs.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/steps/Story_4CLEM_StepDefs.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/steps/Story_5CLEM_StepDefs.js" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
+  <component name="ProjectId" id="34kC5uVfs0oGe5srV0ko9NM2Jhi" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/Users/clementineruiz/Documents/BEng Bioengineering/McGill U3 Fall/ECSE 429/DreamTeam/PART B"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/steps" />
+      <recent name="$PROJECT_DIR$/features" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="PART B" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="PART B" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <module name="PART B" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="Tox" factoryName="Tox">
+      <module name="PART B" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d6e5bbe1-5ae2-4096-9344-57e8af084bfd" name="Changes" comment="" />
+      <created>1761748003348</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1761748003348</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
+</project>

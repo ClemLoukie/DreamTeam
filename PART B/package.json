@@ -4,7 +4,7 @@
   "description": "story testing of REST Api",
   "main": "index.js",
   "scripts": {
-    "cucumber": "cucumber-js ./features -r ./steps --order random:765432"
+    "cucumber": "cucumber-js ./features -r ./steps --order random"
   },
   "author": "",
   "license": "ISC",
