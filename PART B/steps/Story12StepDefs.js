@@ -34,14 +34,6 @@ When(
   }
 );
 
-Then("the status code 200 is returned", function () {
-  expect(returnCode.value).to.equal(200);
-});
-
-Then("the status code 404 is returned", function () {
-  expect(returnCode.value).to.equal(404);
-});
-
 
 //
 // Alternate FLOW: Create with XML

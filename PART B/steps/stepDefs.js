@@ -129,4 +129,12 @@ Then("the student is notified that the TODO was not found with message {string}"
   expect(respText).to.include(message);
 });
 
+Then("the status code 200 is returned", function () {
+  expect(returnCode.value).to.equal(200);
+});
+
+Then("the status code 404 is returned", function () {
+  expect(returnCode.value).to.equal(404);
+});
+
 module.exports = { host, context, resolveId };

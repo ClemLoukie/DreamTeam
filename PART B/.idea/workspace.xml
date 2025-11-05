@@ -5,68 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d6e5bbe1-5ae2-4096-9344-57e8af084bfd" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/features/Story10UpdateDoneStatusTodo.feature" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/features/Story11AddProjectToProjectList.feature" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/features/Story12DeleteProjectFromProjectList.feature" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/features/Story13UpdateProjectDescription.feature" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/features/Story14UpdateProjectActivityStatus.feature" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/features/Story15QueryProjects.feature" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/features/Story1CategoryCreation.feature" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/features/Story2ChangeCategoryWIthPOST.feature" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/features/Story3ChangeCategoryWithPUT.feature" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/features/Story4FindCategorybyID.feature" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/features/Story5DeleteCategories.feature" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/features/Story6CreateTodo.feature" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/features/Story7DeleteTodo.feature" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/features/Story8QueryTodo.feature" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/features/Story9UpdateDescriptionTodo.feature" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/steps/Story10StepDefs.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/steps/Story11StepDefs.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/steps/Story12StepDefs.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/steps/Story13StepDefs.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/steps/Story14StepDefs.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/steps/Story15StepDefs.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/steps/Story1StepDefs.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/steps/Story2StepDefs.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/steps/Story3StepDefs.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/steps/Story4StepDefs.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/steps/Story5StepDefs.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/steps/Story6StepDefs.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/steps/Story7StepDefs.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/steps/Story8StepDefs.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/steps/Story9StepDefs.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TestUtil.js" beforeDir="false" afterPath="$PROJECT_DIR$/TestUtil.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/Story1Paul_Todo_Create.feature" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/Story1ThomasCategoryCreation.feature" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/Story2Paul_Todo_Delete.feature" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/Story2ThomasChangeCategoryWIthPOST.feature" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/Story3Paul_Todo_Query.feature" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/Story3ThomasChange category with PUT.feature" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/Story4Paul_Todo_Update_description.feature" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/Story4ThomasFindCategorybyID.feature" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/Story5Paul_Todo_Update_donestatus.feature" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/Story5ThomasDeleteCategories.feature" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/Story_1CLEM_AddProjectToProjectList.feature" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/Story_2CLEM_DeleteProjectFromProjectList.feature" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/Story_3CLEM_UpdateProjectDescription.feature" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/Story_4CLEM_UpdateProjectActivityStatus.feature" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/Story_5CLEM_QueryProjects.feature" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/steps/01CreateToDoStepDefs.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/steps/01DeleteToDoStepDefs.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/steps/01QueryToDoStepDefs.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/steps/01UpdateToDoDescriptionStepDefs.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/steps/01UpdateToDoDonestatusStepDefs.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/steps/Story1ThomasStepDefs.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/steps/Story2ThomasStepDefs.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/steps/Story3ThomasStepDefs.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/steps/Story4ThomasStepDefs.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/steps/Story5ThomasStepDefs.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/steps/Story_1CLEM_StepDefs.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/steps/Story_2CLEM_StepDefs.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/steps/Story_3CLEM_StepDefs.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/steps/Story_4CLEM_StepDefs.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/steps/Story_5CLEM_StepDefs.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/steps/Story12StepDefs.js" beforeDir="false" afterPath="$PROJECT_DIR$/steps/Story12StepDefs.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/steps/stepDefs.js" beforeDir="false" afterPath="$PROJECT_DIR$/steps/stepDefs.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -90,17 +31,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "/Users/clementineruiz/Documents/BEng Bioengineering/McGill U3 Fall/ECSE 429/DreamTeam/PART B"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/clementineruiz/Documents/BEng Bioengineering/McGill U3 Fall/ECSE 429/DreamTeam/PART B&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/steps" />
