@@ -99,10 +99,10 @@ When("the student requests to query a project with completed status {string}", a
 });
 
 Then("the projects with completed status {string} are displayed", async function (completed) {
-  // 🧹 Clean up the query value (e.g. '"true"' → 'true')
+  // cleanup
   const cleanCompleted = completed.replace(/['"]+/g, "");
 
-  // 🗂️ Step 1: Fetch all projects first (for debugging)
+  // query all projects first
   const allRes = await chai
     .request(host)
     .get(projectsEndpoint)
@@ -113,7 +113,7 @@ Then("the projects with completed status {string} are displayed", async function
   allProjects.forEach((proj, index) => {
 
   });
-  // 🗂️ Step 2: Now fetch filtered projects based on 'completed'
+  // query filtered projects based on parameter
   const res =
     response ||
     (await chai
@@ -122,7 +122,7 @@ Then("the projects with completed status {string} are displayed", async function
       .query({ completed: cleanCompleted === "true" })
       .set("Content-Type", "application/json"));
 
-  // ✅ Validate response
+  // check response
   expect(res).to.have.status(200);
   expect(res.body).to.have.property("projects");
 
@@ -130,8 +130,7 @@ Then("the projects with completed status {string} are displayed", async function
   expect(projects).to.not.be.undefined;
   expect(projects.length).to.be.greaterThan(0);
 
-
-  // ✅ Verify completed values match the expected query
+  // values match the expected query
   projects.forEach((proj, index) => {
     const matches = String(proj.completed) === String(cleanCompleted);
 
