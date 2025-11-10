@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="JSONEndpoints.projects.ProjectEndpointTests" tests="22" skipped="0" failures="0" errors="0" timestamp="2025-10-07T08:20:10" hostname="Clementines-MacBook-Air-2.local" time="23.421">
+  <properties/>
+  <testcase name="ERROR CASE: JSON payload is malformed - 400 Bad Request" classname="JSONEndpoints.projects.ProjectEndpointTests" time="1.286"/>
+  <testcase name="CAPABILITY: Retrieve header for a project by id" classname="JSONEndpoints.projects.ProjectEndpointTests" time="1.01"/>
+  <testcase name="BUG: Edit existing project using PUT with empty json body still returns 200 instead of error" classname="JSONEndpoints.projects.ProjectEndpointTests" time="1.042"/>
+  <testcase name="CAPABILITY: Create project with valid JSON body" classname="JSONEndpoints.projects.ProjectEndpointTests" time="1.373"/>
+  <testcase name="BUG: Create project with no body still succeeds (returns default empty fields)" classname="JSONEndpoints.projects.ProjectEndpointTests" time="1.056"/>
+  <testcase name="CAPABILITY: Retrieve headers for all projects" classname="JSONEndpoints.projects.ProjectEndpointTests" time="1.039"/>
+  <testcase name="BUG: Edit project with empty JSON body still returns 200 instead of error" classname="JSONEndpoints.projects.ProjectEndpointTests" time="1.042"/>
+  <testcase name="ERROR CASE: PUT on /projects (without ID) not allowed — expect 405" classname="JSONEndpoints.projects.ProjectEndpointTests" time="1.025"/>
+  <testcase name="CAPABILITY: Delete existing project and confirm it no longer exists" classname="JSONEndpoints.projects.ProjectEndpointTests" time="1.043"/>
+  <testcase name="CAPABILITY: Edit existing project using POST /projects/:id" classname="JSONEndpoints.projects.ProjectEndpointTests" time="1.049"/>
+  <testcase name="ERROR CASE: Delete a non existent project - 404 not found" classname="JSONEndpoints.projects.ProjectEndpointTests" time="1.041"/>
+  <testcase name="ERROR CASE: Create project with id - error code 400" classname="JSONEndpoints.projects.ProjectEndpointTests" time="1.038"/>
+  <testcase name="CAPABILITY: Retrieve existing project by ID (GET /projects/:id)" classname="JSONEndpoints.projects.ProjectEndpointTests" time="1.023"/>
+  <testcase name="CAPABILITY: Get all projects when there is one project" classname="JSONEndpoints.projects.ProjectEndpointTests" time="1.038"/>
+  <testcase name="ERROR CASE: Retrieve non-existent project by ID returns 404" classname="JSONEndpoints.projects.ProjectEndpointTests" time="1.035"/>
+  <testcase name="CAPABILITY: Command-line style query ?title" classname="JSONEndpoints.projects.ProjectEndpointTests" time="1.065"/>
+  <testcase name="ERROR CASE: Edit non existent project using PUT /projects/:id" classname="JSONEndpoints.projects.ProjectEndpointTests" time="1.037"/>
+  <testcase name="ERROR CASE: XML payload is malformed - 400 Bad Request" classname="JSONEndpoints.projects.ProjectEndpointTests" time="1.042"/>
+  <testcase name="ERROR CASE: Edit non existent project using POST /projects/:id" classname="JSONEndpoints.projects.ProjectEndpointTests" time="1.032"/>
+  <testcase name="ERROR CASE: DELETE on /projects (without ID) not allowed — expect 405" classname="JSONEndpoints.projects.ProjectEndpointTests" time="1.007"/>
+  <testcase name="BUG: Retrieve header for a project by non existent id returns 200" classname="JSONEndpoints.projects.ProjectEndpointTests" time="1.031"/>
+  <testcase name="CAPABILITY: Edit existing project using PUT /projects/:id" classname="JSONEndpoints.projects.ProjectEndpointTests" time="1.054"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[Oct 07, 2025 4:20:11 A.M. org.apache.http.impl.client.DefaultHttpClient tryExecute
+INFO: I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {}->http://localhost:4567: The target server failed to respond
+Oct 07, 2025 4:20:11 A.M. org.apache.http.impl.client.DefaultHttpClient tryExecute
+INFO: Retrying request to {}->http://localhost:4567
+Oct 07, 2025 4:20:12 A.M. org.apache.http.impl.client.DefaultHttpClient tryExecute
+INFO: I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {}->http://localhost:4567: The target server failed to respond
+Oct 07, 2025 4:20:12 A.M. org.apache.http.impl.client.DefaultHttpClient tryExecute
+INFO: Retrying request to {}->http://localhost:4567
+Oct 07, 2025 4:20:13 A.M. org.apache.http.impl.client.DefaultHttpClient tryExecute
+INFO: I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {}->http://localhost:4567: The target server failed to respond
+Oct 07, 2025 4:20:13 A.M. org.apache.http.impl.client.DefaultHttpClient tryExecute
+INFO: Retrying request to {}->http://localhost:4567
+Oct 07, 2025 4:20:14 A.M. org.apache.http.impl.client.DefaultHttpClient tryExecute
+INFO: I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {}->http://localhost:4567: The target server failed to respond
+Oct 07, 2025 4:20:14 A.M. org.apache.http.impl.client.DefaultHttpClient tryExecute
+INFO: Retrying request to {}->http://localhost:4567
+Oct 07, 2025 4:20:15 A.M. org.apache.http.impl.client.DefaultHttpClient tryExecute
+INFO: I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {}->http://localhost:4567: The target server failed to respond
+Oct 07, 2025 4:20:15 A.M. org.apache.http.impl.client.DefaultHttpClient tryExecute
+INFO: Retrying request to {}->http://localhost:4567
+Oct 07, 2025 4:20:16 A.M. org.apache.http.impl.client.DefaultHttpClient tryExecute
+INFO: I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {}->http://localhost:4567: The target server failed to respond
+Oct 07, 2025 4:20:16 A.M. org.apache.http.impl.client.DefaultHttpClient tryExecute
+INFO: Retrying request to {}->http://localhost:4567
+Oct 07, 2025 4:20:17 A.M. org.apache.http.impl.client.DefaultHttpClient tryExecute
+INFO: I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {}->http://localhost:4567: The target server failed to respond
+Oct 07, 2025 4:20:17 A.M. org.apache.http.impl.client.DefaultHttpClient tryExecute
+INFO: Retrying request to {}->http://localhost:4567
+Oct 07, 2025 4:20:19 A.M. org.apache.http.impl.client.DefaultHttpClient tryExecute
+INFO: I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {}->http://localhost:4567: The target server failed to respond
+Oct 07, 2025 4:20:19 A.M. org.apache.http.impl.client.DefaultHttpClient tryExecute
+INFO: Retrying request to {}->http://localhost:4567
+Oct 07, 2025 4:20:20 A.M. org.apache.http.impl.client.DefaultHttpClient tryExecute
+INFO: I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {}->http://localhost:4567: The target server failed to respond
+Oct 07, 2025 4:20:20 A.M. org.apache.http.impl.client.DefaultHttpClient tryExecute
+INFO: Retrying request to {}->http://localhost:4567
+Oct 07, 2025 4:20:21 A.M. org.apache.http.impl.client.DefaultHttpClient tryExecute
+INFO: I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {}->http://localhost:4567: The target server failed to respond
+Oct 07, 2025 4:20:21 A.M. org.apache.http.impl.client.DefaultHttpClient tryExecute
+INFO: Retrying request to {}->http://localhost:4567
+Oct 07, 2025 4:20:22 A.M. org.apache.http.impl.client.DefaultHttpClient tryExecute
+INFO: I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {}->http://localhost:4567: The target server failed to respond
+Oct 07, 2025 4:20:22 A.M. org.apache.http.impl.client.DefaultHttpClient tryExecute
+INFO: Retrying request to {}->http://localhost:4567
+Oct 07, 2025 4:20:23 A.M. org.apache.http.impl.client.DefaultHttpClient tryExecute
+INFO: I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {}->http://localhost:4567: The target server failed to respond
+Oct 07, 2025 4:20:23 A.M. org.apache.http.impl.client.DefaultHttpClient tryExecute
+INFO: Retrying request to {}->http://localhost:4567
+Oct 07, 2025 4:20:24 A.M. org.apache.http.impl.client.DefaultHttpClient tryExecute
+INFO: I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {}->http://localhost:4567: The target server failed to respond
+Oct 07, 2025 4:20:24 A.M. org.apache.http.impl.client.DefaultHttpClient tryExecute
+INFO: Retrying request to {}->http://localhost:4567
+Oct 07, 2025 4:20:25 A.M. org.apache.http.impl.client.DefaultHttpClient tryExecute
+INFO: I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {}->http://localhost:4567: The target server failed to respond
+Oct 07, 2025 4:20:25 A.M. org.apache.http.impl.client.DefaultHttpClient tryExecute
+INFO: Retrying request to {}->http://localhost:4567
+Oct 07, 2025 4:20:26 A.M. org.apache.http.impl.client.DefaultHttpClient tryExecute
+INFO: I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {}->http://localhost:4567: The target server failed to respond
+Oct 07, 2025 4:20:26 A.M. org.apache.http.impl.client.DefaultHttpClient tryExecute
+INFO: Retrying request to {}->http://localhost:4567
+Oct 07, 2025 4:20:27 A.M. org.apache.http.impl.client.DefaultHttpClient tryExecute
+INFO: I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {}->http://localhost:4567: The target server failed to respond
+Oct 07, 2025 4:20:27 A.M. org.apache.http.impl.client.DefaultHttpClient tryExecute
+INFO: Retrying request to {}->http://localhost:4567
+Oct 07, 2025 4:20:28 A.M. org.apache.http.impl.client.DefaultHttpClient tryExecute
+INFO: I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {}->http://localhost:4567: The target server failed to respond
+Oct 07, 2025 4:20:28 A.M. org.apache.http.impl.client.DefaultHttpClient tryExecute
+INFO: Retrying request to {}->http://localhost:4567
+Oct 07, 2025 4:20:29 A.M. org.apache.http.impl.client.DefaultHttpClient tryExecute
+INFO: I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {}->http://localhost:4567: The target server failed to respond
+Oct 07, 2025 4:20:29 A.M. org.apache.http.impl.client.DefaultHttpClient tryExecute
+INFO: Retrying request to {}->http://localhost:4567
+Oct 07, 2025 4:20:30 A.M. org.apache.http.impl.client.DefaultHttpClient tryExecute
+INFO: I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {}->http://localhost:4567: The target server failed to respond
+Oct 07, 2025 4:20:30 A.M. org.apache.http.impl.client.DefaultHttpClient tryExecute
+INFO: Retrying request to {}->http://localhost:4567
+Oct 07, 2025 4:20:31 A.M. org.apache.http.impl.client.DefaultHttpClient tryExecute
+INFO: I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {}->http://localhost:4567: The target server failed to respond
+Oct 07, 2025 4:20:31 A.M. org.apache.http.impl.client.DefaultHttpClient tryExecute
+INFO: Retrying request to {}->http://localhost:4567
+Oct 07, 2025 4:20:32 A.M. org.apache.http.impl.client.DefaultHttpClient tryExecute
+INFO: I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {}->http://localhost:4567: The target server failed to respond
+Oct 07, 2025 4:20:32 A.M. org.apache.http.impl.client.DefaultHttpClient tryExecute
+INFO: Retrying request to {}->http://localhost:4567
+Oct 07, 2025 4:20:33 A.M. org.apache.http.impl.client.DefaultHttpClient tryExecute
+INFO: I/O exception (org.apache.http.NoHttpResponseException) caught when processing request to {}->http://localhost:4567: The target server failed to respond
+Oct 07, 2025 4:20:33 A.M. org.apache.http.impl.client.DefaultHttpClient tryExecute
+INFO: Retrying request to {}->http://localhost:4567
+]]></system-err>
+</testsuite>
