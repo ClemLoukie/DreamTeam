@@ -6,7 +6,7 @@ import static org.hamcrest.Matchers.*;
 import java.io.IOException;
 
 @TestMethodOrder(MethodOrderer.Random.class)
-public class ProjectEndpointTests {
+public class ProjectEndpointPerformanceTests {
 
     private static final String BASE_URL = "http://localhost:4567";
     private Process serverProcess;
