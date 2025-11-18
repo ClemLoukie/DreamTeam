@@ -65,7 +65,6 @@ public class TodoEndpointPerformanceTests {
             writer.println("Objects,Create(ms),Edit(ms),Delete(ms),CPU_Load,Free_Memory(MB)");
 
             for (int num : numOfObjects) {
-                // --- REQUEST BODIES ---
                 String requestBody = """
                         {
                             "title": "Finish 429 Assignment",
@@ -82,7 +81,6 @@ public class TodoEndpointPerformanceTests {
                         }
                         """;
 
-                // --- CREATE ---
                 long startCreate = System.nanoTime();
                 for (int i = 0; i < num; i++) {
                     given()
@@ -96,7 +94,6 @@ public class TodoEndpointPerformanceTests {
                 }
                 double createTime = (System.nanoTime() - startCreate) / 1_000_000.0;
 
-                // --- EDIT ---
                 long startEdit = System.nanoTime();
                 for (int i = 0; i < num; i++) {
                     given()
@@ -111,7 +108,6 @@ public class TodoEndpointPerformanceTests {
                 }
                 double editTime = (System.nanoTime() - startEdit) / 1_000_000.0;
 
-                // --- DELETE ---
                 long startDelete = System.nanoTime();
                 for (int i = 0; i < num; i++) {
                     given()
@@ -123,11 +119,9 @@ public class TodoEndpointPerformanceTests {
                 }
                 double deleteTime = (System.nanoTime() - startDelete) / 1_000_000.0;
 
-                // --- SYSTEM METRICS ---
                 double cpuLoad = osBean.getSystemLoadAverage(); 
                 long freeMemoryMB = runtime.freeMemory() / (1024 * 1024);
 
-                // --- WRITE RESULTS ---
                 writer.printf(Locale.US,
                         "%d,%.2f,%.2f,%.2f,%.2f,%d%n",
                         num, createTime, editTime, deleteTime, cpuLoad, freeMemoryMB);
