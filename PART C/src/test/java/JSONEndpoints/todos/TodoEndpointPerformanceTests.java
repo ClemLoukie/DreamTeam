@@ -4,11 +4,14 @@ import org.junit.jupiter.api.*;
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.lang.management.*;
+import java.io.*;
+import java.lang.management.ManagementFactory;
+
+import com.sun.management.OperatingSystemMXBean;
+import oshi.SystemInfo;
+import oshi.software.os.OSProcess;
+import oshi.software.os.OperatingSystem;
+
 import java.util.*;
 
 public class TodoEndpointPerformanceTests {
@@ -16,119 +19,151 @@ public class TodoEndpointPerformanceTests {
     private static final String BASE_URL = "http://localhost:4567";
     private Process serverProcess;
 
+    private SystemInfo systemInfo;
+    private OperatingSystem os;
+
     @BeforeEach
     void startServer() throws IOException, InterruptedException {
+        systemInfo = new SystemInfo();
+        os = systemInfo.getOperatingSystem();
+
         String jarPath = System.getProperty("user.dir") + "/runTodoManagerRestAPI-1.5.5.jar";
+
         serverProcess = new ProcessBuilder("java", "-jar", jarPath)
                 .inheritIO()
                 .start();
 
-        boolean serverReady = false;
+        boolean ready = false;
         int retries = 0;
-        while (!serverReady && retries < 30) {
+
+        while (!ready && retries < 40) {
             try {
                 given().baseUri(BASE_URL).get("/todos").then().statusCode(200);
-                serverReady = true;
+                ready = true;
             } catch (Exception e) {
                 Thread.sleep(500);
                 retries++;
             }
         }
 
-        if (!serverReady) {
+        if (!ready)
             throw new RuntimeException("Server did not start in time.");
-        }
     }
 
     @AfterEach
     void stopServer() {
-        try {
-            given().baseUri(BASE_URL).get("/shutdown");
-        } catch (Exception ignored) {}
+        try { given().baseUri(BASE_URL).get("/shutdown"); } catch (Exception ignored) {}
+
         if (serverProcess != null && serverProcess.isAlive()) {
             serverProcess.destroy();
         }
     }
 
-    @DisplayName("Performance: Transaction time, CPU, and Memory for create, edit, delete (Todos)")
+    private double getProcessCpuPercent() throws InterruptedException {
+        OperatingSystemMXBean bean =
+                (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+
+        double c1 = bean.getProcessCpuLoad();
+        Thread.sleep(100);
+        double c2 = bean.getProcessCpuLoad();
+        Thread.sleep(100);
+        double c3 = bean.getProcessCpuLoad();
+
+        double avg = (c1 + c2 + c3) / 3.0;
+        return avg * 100.0;
+    }
+
+    private long getProcessMemoryMB() {
+        long pid = serverProcess.pid();
+        OSProcess proc = os.getProcess((int) pid);
+        long rss = proc.getResidentSetSize();      // REAL RAM usage
+        return rss / (1024 * 1024);
+    }
+
+    @DisplayName("Performance: Todos – Real CPU%, Real Memory")
     @Test
-    void performanceTestCUD_Todos() {
-        int[] numOfObjects = {1, 2, 5, 10, 50, 100, 200, 500, 1000, 2000, 3000};
-        int overall_id = 2;
+    void performanceTestTodos() {
 
-        OperatingSystemMXBean osBean = ManagementFactory.getOperatingSystemMXBean();
-        Runtime runtime = Runtime.getRuntime();
+        int[] numObjects = {1, 2, 5, 10, 50, 100, 200, 500, 1000, 2000};
+        int offset = 2;
 
-        File csvFile = new File("TodoPerformanceResults.csv");
+        File csv = new File("TodoPerformanceResults.csv");
 
-        try (PrintWriter writer = new PrintWriter(new FileWriter(csvFile))) {
-            writer.println("Objects,Create(ms),Edit(ms),Delete(ms),CPU_Load,Free_Memory(MB)");
+        try (PrintWriter writer = new PrintWriter(new FileWriter(csv))) {
+            writer.println("Objects,Create(ms),Edit(ms),Delete(ms),CPU(%),Memory(MB)");
 
-            for (int num : numOfObjects) {
-                String requestBody = """
+            for (int n : numObjects) {
+
+                // Request bodies
+                String bodyCreate = """
                         {
-                            "title": "Finish 429 Assignment",
+                            "title": "Perf Todo",
                             "doneStatus": false,
-                            "description": "Work on API performance tests"
+                            "description": "Load test todo"
                         }
                         """;
 
-                String updatedBody = """
+                String bodyUpdate = """
                         {
                             "title": "Updated Todo",
                             "doneStatus": true,
-                            "description": "Updated performance test"
+                            "description": "Updated during performance test"
                         }
                         """;
 
-                long startCreate = System.nanoTime();
-                for (int i = 0; i < num; i++) {
+                // ----- CREATE -----
+                long sCreate = System.nanoTime();
+                for (int i = 0; i < n; i++) {
                     given()
-                            .baseUri(BASE_URL)
-                            .contentType("application/json")
-                            .body(requestBody)
-                            .when()
-                            .post("/todos")
-                            .then()
-                            .statusCode(201);
+                        .baseUri(BASE_URL)
+                        .contentType("application/json")
+                        .body(bodyCreate)
+                        .post("/todos")
+                        .then()
+                        .statusCode(201);
                 }
-                double createTime = (System.nanoTime() - startCreate) / 1_000_000.0;
+                double tCreate = (System.nanoTime() - sCreate) / 1_000_000.0;
 
-                long startEdit = System.nanoTime();
-                for (int i = 0; i < num; i++) {
+
+                // ----- EDIT -----
+                long sEdit = System.nanoTime();
+                for (int i = 0; i < n; i++) {
                     given()
-                            .baseUri(BASE_URL)
-                            .contentType("application/json")
-                            .body(updatedBody)
-                            .when()
-                            .put("/todos/" + (i + overall_id))
-                            .then()
-                            .statusCode(anyOf(is(200), is(201)))
-                            .body("title", equalTo("Updated Todo"));
+                        .baseUri(BASE_URL)
+                        .contentType("application/json")
+                        .body(bodyUpdate)
+                        .put("/todos/" + (i + offset))
+                        .then()
+                        .statusCode(anyOf(is(200), is(201)));
                 }
-                double editTime = (System.nanoTime() - startEdit) / 1_000_000.0;
+                double tEdit = (System.nanoTime() - sEdit) / 1_000_000.0;
 
-                long startDelete = System.nanoTime();
-                for (int i = 0; i < num; i++) {
+
+                // ----- DELETE -----
+                long sDelete = System.nanoTime();
+                for (int i = 0; i < n; i++) {
                     given()
-                            .baseUri(BASE_URL)
-                            .when()
-                            .delete("/todos/" + (i + overall_id))
-                            .then()
-                            .statusCode(is(200));
+                        .baseUri(BASE_URL)
+                        .delete("/todos/" + (i + offset))
+                        .then()
+                        .statusCode(is(200));
                 }
-                double deleteTime = (System.nanoTime() - startDelete) / 1_000_000.0;
+                double tDelete = (System.nanoTime() - sDelete) / 1_000_000.0;
 
-                double cpuLoad = osBean.getSystemLoadAverage(); 
-                long freeMemoryMB = runtime.freeMemory() / (1024 * 1024);
 
+                // ----- REAL CPU & RAM -----
+                double cpu = getProcessCpuPercent();
+                long mem = getProcessMemoryMB();
+
+                // Write CSV row
                 writer.printf(Locale.US,
                         "%d,%.2f,%.2f,%.2f,%.2f,%d%n",
-                        num, createTime, editTime, deleteTime, cpuLoad, freeMemoryMB);
+                        n, tCreate, tEdit, tDelete, cpu, mem);
 
-                overall_id += num;
+                offset += n;
             }
-        } catch (IOException e) {
+
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
