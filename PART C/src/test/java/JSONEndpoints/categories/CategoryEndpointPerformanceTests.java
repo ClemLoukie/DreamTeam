@@ -44,320 +44,99 @@ public class CategoryEndpointPerformanceTests {
         }
     }
 
-    @DisplayName("CAPABILITY: Retrieve headers for all categories")
-    // return all "categories" headers
+    @DisplayName("Performance: Category transaction time, CPU, and Memory for create, edit, delete")
     @Test
-    void testGetCategoryHeaders() {
-        given().
-                baseUri(BASE_URL).
-                when().
-                head("/categories").
-                then().
-                statusCode(200)
-                .header("Content-Type", equalTo("application/json"))
-                .header("Transfer-Encoding", equalTo("chunked"));
-    }
+    void performanceTestCUD() {
+        int[] numOfObjects = {1, 2, 5, 10, 50, 75, 100, 1000, 2000, 3000}; // ,2000,3000,4000,5000,6000,7000,8000,9000,10000
+        List<String> results = new ArrayList<>();
+        int overall_id = 2;
 
-    @DisplayName("CAPABILITY: Retrieve body for all categories")
-    // return starter categories
-    @Test
-    void testGetCategories() {
-        given().
-                baseUri(BASE_URL).
-                when().
-                get("/categories").
-                then().
-                statusCode(200)
-                .body("size()", equalTo(1));
-    }
+        OperatingSystemMXBean osBean = ManagementFactory.getOperatingSystemMXBean();
+        Runtime runtime = Runtime.getRuntime();
+
+        File csvFile = new File("CategoryPerformanceResults.csv");
+        try (PrintWriter writer = new PrintWriter(new FileWriter(csvFile))) {
+            writer.println("Objects,Create(ms),Edit(ms),Delete(ms),CPU_Load,Free_Memory(MB)");
+
+            for (int num : numOfObjects) {
+
+                int i = 0;
+                String requestBody = """
+                        {
+                            "title": "test category",
+                            "description": "this is a description"
+                        }
+                        """; // We will not edit the requestBody per use
+
+                long startCreate = System.nanoTime();
+                // Create (post)
+                for (i = 0; i < num; i++) {
+
+                    String id = given().
+                            baseUri(BASE_URL).
+                            contentType("application/json").
+                            body(requestBody).
+                            when().
+                            post("/categories").
+                            then().
+                            statusCode(201).
+                            extract().
+                            path("id");
+
+                }
+                double createTime = (System.nanoTime() - startCreate) / 1000000.0;
+
+                long startEdit = System.nanoTime();
 
 
+                // Edit (put)
+                for (i = 0; i < num; i++) {
+                    given()
+                            .baseUri(BASE_URL).
+                            contentType("application/json").
+                            body(requestBody).
+                            when()
+                            .put("/categories/" + (i + overall_id))
+                            .then()
+                            .statusCode(200).
+                            body("title", equalTo("test category")).
+                            body("description", equalTo("this is a description"));
+                }
 
-    @DisplayName("CAPABILITY: POST to categories")
-    // make a new category with post
-    @Test
-    void testPOSTCategories() {
-        String requestBody = """
-        {
-            "title": "r sint occaecat cupi",
-            "description": "ur sint occaecat cup"
+                double editTime = (System.nanoTime() - startEdit) / 1000000.0;
+
+                long startDelete = System.nanoTime();
+
+                // Delete
+                for (i = 0; i < num; i++) {
+
+                    given()
+                            .baseUri(BASE_URL)
+                            .when()
+                            .delete("/categories/" + (i + overall_id)) // testing deleting the original entry
+                            .then()
+                            .statusCode(is(200));
+                    // We do not need to check the object has been deleted as we dd this during unit testing PART A
+                }
+                double deleteTime = (System.nanoTime() - startDelete) / 1000000.0;
+
+                double cpuLoad = osBean.getSystemLoadAverage(); // may return -1 on Windows
+                long freeMemoryMB = runtime.freeMemory() / (1024 * 1024);
+
+                // Save results
+                writer.printf(Locale.US,
+                        "%d,%.2f,%.2f,%.2f,%.2f,%d%n",
+                        num, createTime, editTime, deleteTime, cpuLoad, freeMemoryMB);
+
+                overall_id += num;
+
+            }
+
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-    """;
-        given().
-                baseUri(BASE_URL).
-                when().
-                body(requestBody).
-                when().
-                post("/categories").
-                then().
-                statusCode(201).
-		body("title", equalTo("r sint occaecat cupi")).
-		body("description", equalTo("ur sint occaecat cup"));
     }
-
-    @DisplayName("ERROR: POST with invalid data")
-    // make a new category with post
-    @Test
-    void testPOSTCategoriesBAD() {
-        String requestBody = """
-        {
-            "id" : "1"
-            "title": "r sint occaecat cupi",
-            "description": "ur sint occaecat cup"
-        }
-    """;
-        given().
-                baseUri(BASE_URL).
-                when().
-                body(requestBody).
-                when().
-                post("/categories").
-                then().
-                statusCode(400);
-    }
-
-	@DisplayName("CAPABILITY: Retrieve existing category by ID")
-    	@Test
-    	void testGetCategoryByID() {
-        	given()
-                .baseUri(BASE_URL)
-                .when()
-                .get("/categories/1")
-                .then()
-                .statusCode(200);
-    }
-
-    @DisplayName("ERROR: Retrieve existing category from bad ID")
-    @Test
-    void testGetCategoryByIDBAD() {
-        given()
-                .baseUri(BASE_URL)
-                .when()
-                .get("/categories/0")
-                .then()
-                .statusCode(404);
-    }
-
-    @DisplayName("Capability: get header data from an id")
-    @Test
-    void testGetCategoryHeadersID() {
-        given().
-                baseUri(BASE_URL).
-                when().
-                head("/categories/1").
-                then().
-                statusCode(200);
-    }
-
-    @DisplayName("ERROR: when using head on invalid does not return")
-    @Test
-    void testGetCategoryHeadersBug() {
-        given().
-                baseUri(BASE_URL).
-                when().
-                head("/categories/0").
-                then().
-                statusCode(404);
-    }
-
-
-	
-    @DisplayName("CAPABILITY: Edit existing category using POST /categories/:id")
-    @Test
-    void testEditCategoryByID() {
-        String requestBody = """
-        {
-            "title": "Updated",
-            "description": "Updated"
-        }
-        """;
-
-        given()
-                .baseUri(BASE_URL)
-                .contentType("application/json")
-                .body(requestBody)
-                .when()
-                .post("/categories/1")
-                .then()
-                .statusCode(200)
-                .body("title", equalTo("Updated"))
-                .body("description", equalTo("Updated"));
-    }
-
-    @DisplayName("ERROR: Edit invalid category using POST /categories/:id")
-    @Test
-    void testEditCategoryByIDBAD() {
-        String requestBody = """
-        {
-            "title": "Updated",
-            "description": "Updated"
-        }
-        """;
-
-        given()
-                .baseUri(BASE_URL)
-                .contentType("application/json")
-                .body(requestBody)
-                .when()
-                .post("/categories/0")
-                .then()
-                .statusCode(404);
-    }
-
-    @DisplayName("CAPABILITY: Edit existing category using PUT /categories/:id")
-    @Test
-    void testEditCategoryByIDPUT() {
-        String requestBody = """
-        {
-            "title": "Updated PUT",
-            "description": "Updated PUT"
-        }
-        """;
-
-        given()
-                .baseUri(BASE_URL)
-                .contentType("application/json")
-                .body(requestBody)
-                .when()
-                .put("/categories/1")
-                .then()
-                .statusCode(200)
-                .body("title", equalTo("Updated PUT"))
-                .body("description", equalTo("Updated PUT"));
-    }
-
-    @DisplayName("ERROR: Edit invalid category using PUT /categories/:id")
-    @Test
-    void testEditCategoryByIDPUTBAD() {
-        String requestBody = """
-        {
-            "title": "Updated PUT",
-            "description": "Updated PUT"
-        }
-        """;
-
-        given()
-                .baseUri(BASE_URL)
-                .contentType("application/json")
-                .body(requestBody)
-                .when()
-                .put("/categories/0")
-                .then()
-                .statusCode(404);
-    }
-
-
-    @DisplayName("CAPABILITY: Delete existing category and confirm it no longer exists")
-    @Test
-    void testDeleteTodo() {
-        // Create a temporary category
-        String requestBody = """
-        {
-            "title": "To die"
-        }
-        """;
-        String id = given()
-                .baseUri(BASE_URL)
-                .contentType("application/json")
-                .body(requestBody)
-                .when()
-                .post("/categories")
-                .then()
-                .statusCode(201)
-                .extract()
-                .path("id");
-
-        // Delete and confirm
-        given()
-                .baseUri(BASE_URL)
-                .when()
-                .delete("/categories/" + id)
-                .then()
-                .statusCode(200);
-
-        given()
-                .baseUri(BASE_URL)
-                .when()
-                .get("/categories/" + id)
-                .then()
-                .statusCode(404);
-    }
-
-    @DisplayName("ERROR: double delete")
-    @Test
-    void testDeleteTodoBAD() {
-        // Create a temporary category
-        String requestBody = """
-        {
-            "title": "To die"
-        }
-        """;
-        String id = given()
-                .baseUri(BASE_URL)
-                .contentType("application/json")
-                .body(requestBody)
-                .when()
-                .post("/categories")
-                .then()
-                .statusCode(201)
-                .extract()
-                .path("id");
-
-        // Delete and confirm
-        given()
-                .baseUri(BASE_URL)
-                .when()
-                .delete("/categories/" + id)
-                .then()
-                .statusCode(200);
-
-        given()
-                .baseUri(BASE_URL)
-                .when()
-                .delete("/categories/" + id)
-                .then()
-                .statusCode(404);
-    }
-
-    @DisplayName("ERROR CASE: DELETE on /categories (without ID) returns 405")
-    @Test
-    void testDeleteOnCategoriesRoot() {
-        given()
-                .baseUri(BASE_URL)
-                .when()
-                .delete("/categories")
-                .then()
-                .statusCode(405);
-    }
-
-    @DisplayName("ERROR CASE: Retrieve non-existent object returns 404")
-    @Test
-    void testGetNonCategoryTodo() {
-        given()
-                .baseUri(BASE_URL)
-                .when()
-                .get("/categories/0")
-                .then()
-                .statusCode(404);
-    }
-    @DisplayName("ERROR CASE: invalid syntax JSON payload - 400 Bad Request")
-    @Test
-    void testInvalidSyntaxJSON() {
-        String requestBody = """
-            {
-                "title ": "Bad data
-            """;
-
-        given()
-                .baseUri(BASE_URL)
-                .contentType("application/json")
-                .body(requestBody)
-                .when()
-                .post("/categoriess")
-                .then()
-                .statusCode(404);
-    }
-
 
 
 
