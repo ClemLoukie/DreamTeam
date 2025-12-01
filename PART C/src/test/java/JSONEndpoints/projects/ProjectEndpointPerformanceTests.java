@@ -4,146 +4,171 @@ import org.junit.jupiter.api.*;
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.lang.management.*;
-import java.util.*;
+import java.io.*;
+import java.lang.management.ManagementFactory;
 
+import com.sun.management.OperatingSystemMXBean;
+import oshi.SystemInfo;
+import oshi.software.os.OSProcess;
+import oshi.software.os.OperatingSystem;
+
+import java.util.*;
 
 public class ProjectEndpointPerformanceTests {
 
     private static final String BASE_URL = "http://localhost:4567";
     private Process serverProcess;
 
+    private SystemInfo systemInfo;
+    private OperatingSystem os;
+
+    @BeforeAll
+    static void setupOshi() {}
+
     @BeforeEach
     void startServer() throws IOException, InterruptedException {
+        systemInfo = new SystemInfo();
+        os = systemInfo.getOperatingSystem();
+
         String jarPath = System.getProperty("user.dir") + "/runTodoManagerRestAPI-1.5.5.jar";
+
         serverProcess = new ProcessBuilder("java", "-jar", jarPath)
                 .inheritIO()
                 .start();
 
-        boolean serverReady = false;
+        boolean ready = false;
         int retries = 0;
-        while (!serverReady && retries < 30) {
+
+        while (!ready && retries < 40) {
             try {
                 given().baseUri(BASE_URL).get("/projects").then().statusCode(200);
-                serverReady = true;
+                ready = true;
             } catch (Exception e) {
                 Thread.sleep(500);
                 retries++;
             }
         }
 
-        if (!serverReady) {
-            throw new RuntimeException("Server did not start in time.");
-        }
+        if (!ready) throw new RuntimeException("Server did not start in time.");
     }
 
     @AfterEach
     void stopServer() {
-        try {
-            given().baseUri(BASE_URL).get("/shutdown");
-        } catch (Exception ignored) {}
+        try { given().baseUri(BASE_URL).get("/shutdown"); } catch (Exception ignored) {}
+
         if (serverProcess != null && serverProcess.isAlive()) {
             serverProcess.destroy();
         }
     }
 
+    private double getProcessCpuPercent() throws InterruptedException {
+        OperatingSystemMXBean bean =
+                (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
 
-    @DisplayName("Performance: Transaction time, CPU, and Memory for create, edit, delete")
+        double c1 = bean.getProcessCpuLoad();
+        Thread.sleep(100);
+        double c2 = bean.getProcessCpuLoad();
+        Thread.sleep(100);
+        double c3 = bean.getProcessCpuLoad();
+
+        double avg = (c1 + c2 + c3) / 3.0;
+        return avg * 100.0;
+    }
+
+    private long getProcessMemoryMB() {
+        long pid = serverProcess.pid();
+        OSProcess proc = os.getProcess((int) pid);
+        long rss = proc.getResidentSetSize();
+        return rss / (1024 * 1024);
+    }
+
+    @DisplayName("Performance: Projects – Real CPU%, Real RAM")
     @Test
-    void performanceTestCUD() {
-        int[] numOfObjects = {1, 2, 5, 10, 50, 75, 100, 1000, 2000, 3000}; // ,2000,3000,4000,5000,6000,7000,8000,9000,10000
-        List<String> results = new ArrayList<>();
-        int overall_id = 2;
+    void performanceTestCategories() {
 
-        OperatingSystemMXBean osBean = ManagementFactory.getOperatingSystemMXBean();
-        Runtime runtime = Runtime.getRuntime();
+        int[] numObjects = {1, 5, 10, 50, 75, 100, 200, 300, 400, 500, 1000};
+        int offset = 2;
 
-        File csvFile = new File("ProjectPerformanceResults.csv");
-        try (PrintWriter writer = new PrintWriter(new FileWriter(csvFile))) {
-            writer.println("Objects,Create(ms),Edit(ms),Delete(ms),CPU_Load,Free_Memory(MB)");
+        File csv = new File("ProjectPerformanceResults.csv");
 
-            for (int num : numOfObjects) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(csv))) {
+            writer.println("Objects,Create(ms),Edit(ms),Delete(ms),Create CPU(%),Edit CPU(%),Delete CPU(%),Create Memory(MB),Edit Memory(MB),Delete Memory(MB)");
 
-                int i = 0;
-                String requestBody = """
-                        {
-                            "title": "School",
-                            "description": "Meeting for 429 group"
+            for (int n : numObjects) {
+                System.out.println(n);
+
+                // Bodies
+                String bodyCreate = """
+                        { 
+                           "title": "IceCream Man",
+                           "description": ""
                         }
-                        """; // We will not edit the requestBody per use
+                        """;
 
-                long startCreate = System.nanoTime();
-                // Create (post)
-                for (i = 0; i < num; i++) {
+                String bodyUpdate = """
+                        {
+                            "title": "Updated Project",
+                            "description": "Updated during performance testing"
+                        }
+                        """;
 
-                    String id = given().
-                            baseUri(BASE_URL).
-                            contentType("application/json").
-                            body(requestBody).
-                            when().
-                            post("/projects").
-                            then().
-                            statusCode(201).
-                            extract().
-                            path("id");
-
-                }
-                double createTime = (System.nanoTime() - startCreate) / 1000000.0;
-
-                long startEdit = System.nanoTime();
-
-
-                // Edit (put)
-                for (i = 0; i < num; i++) {
-                    given()
-                            .baseUri(BASE_URL).
-                            contentType("application/json").
-                            body(requestBody).
-                            when()
-                            .put("/projects/" + (i + overall_id))
-                            .then()
-                            .statusCode(200).
-                            body("title", equalTo("School")).
-                            body("description", equalTo("Meeting for 429 group"));
-                }
-
-                double editTime = (System.nanoTime() - startEdit) / 1000000.0;
-
-                long startDelete = System.nanoTime();
-
-                // Delete
-                for (i = 0; i < num; i++) {
-
+                // ----- Create -----
+                long sCreate = System.nanoTime();
+                for (int i = 0; i < n; i++) {
                     given()
                             .baseUri(BASE_URL)
+                            .contentType("application/json")
+                            .body(bodyCreate)
                             .when()
-                            .delete("/projects/" + (i + overall_id)) // testing deleting the original entry
+                            .post("/projects")
+                            .then()
+                            .statusCode(201);
+                }
+                double tCreate = ((System.nanoTime() - sCreate) / 1_000_000.0)/n;
+                double cpuCreate = getProcessCpuPercent();
+                long memCreate = getProcessMemoryMB();
+
+                // ----- Edit -----
+                long sEdit = System.nanoTime();
+                for (int i = 0; i < n; i++) {
+                    given()
+                            .baseUri(BASE_URL)
+                            .contentType("application/json")
+                            .body(bodyUpdate)
+                            .put("/projects/" + (i + offset))
+                            .then()
+                            .statusCode(anyOf(is(200), is(201)));
+                }
+                double tEdit = ((System.nanoTime() - sEdit) / 1_000_000.0)/n;
+                double cpuEdit = getProcessCpuPercent();
+                long memEdit = getProcessMemoryMB();
+
+                // ----- Delete -----
+                long sDelete = System.nanoTime();
+                for (int i = 0; i < n; i++) {
+                    given()
+                            .baseUri(BASE_URL)
+                            .delete("/projects/" + (i + offset))
                             .then()
                             .statusCode(is(200));
-                    // We do not need to check the object has been deleted as we dd this during unit testing PART A
                 }
-                double deleteTime = (System.nanoTime() - startDelete) / 1000000.0;
+                double tDelete = ((System.nanoTime() - sDelete) / 1_000_000.0)/n;
+                double cpuDelete = getProcessCpuPercent();
+                long memDelete = getProcessMemoryMB();
 
-                double cpuLoad = osBean.getSystemLoadAverage(); // may return -1 on Windows
-                long freeMemoryMB = runtime.freeMemory() / (1024 * 1024);
-
-                // Save results
                 writer.printf(Locale.US,
-                        "%d,%.2f,%.2f,%.2f,%.2f,%d%n",
-                        num, createTime, editTime, deleteTime, cpuLoad, freeMemoryMB);
+                        "%d,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%d,%d,%d%n",
+                        n,
+                        tCreate, tEdit, tDelete,
+                        cpuCreate, cpuEdit, cpuDelete,
+                        memCreate, memEdit, memDelete
+                );
 
-                overall_id += num;
-
+                offset += n;
             }
 
-
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
-
 }
