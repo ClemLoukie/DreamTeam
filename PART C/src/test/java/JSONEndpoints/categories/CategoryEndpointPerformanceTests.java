@@ -97,12 +97,13 @@ public class CategoryEndpointPerformanceTests {
             writer.println("Objects,Create(ms),Edit(ms),Delete(ms),Create CPU(%),Edit CPU(%),Delete CPU(%),Create Memory(MB),Edit Memory(MB),Delete Memory(MB)");
 
             // Bodies
+            int r = new java.util.Random().nextInt(100000); // make random
             String bodyCreate = """
-                        { 
+                        {
                            "title": "Perf Category",
-                           "description": ""
+                           "description": "%d"
                         }
-                        """;
+                        """.formatted(r);
 
             for (int n : numObjects) { // Create the N objects (Populate the system with N objects.)
 
