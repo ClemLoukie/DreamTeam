@@ -1,5 +1,6 @@
 package JSONEndpoints.projects;
 
+import io.restassured.response.Response;
 import org.junit.jupiter.api.*;
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
@@ -86,86 +87,107 @@ public class ProjectEndpointPerformanceTests {
     @Test
     void performanceTestCategories() {
 
-        int[] numObjects = {1, 5, 10, 50, 75, 100, 200, 300, 400, 500, 1000};
-        int offset = 2;
+        int[] numObjects = {1, 5, 10, 50, 75, 100, 200, 300, 400, 500, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000}; // always do 1 less
+        int to_tamper = 1; // first added id starts at 2
+        int current_number = 1;
 
         File csv = new File("ProjectPerformanceResults.csv");
 
         try (PrintWriter writer = new PrintWriter(new FileWriter(csv))) {
             writer.println("Objects,Create(ms),Edit(ms),Delete(ms),Create CPU(%),Edit CPU(%),Delete CPU(%),Create Memory(MB),Edit Memory(MB),Delete Memory(MB)");
 
-            for (int n : numObjects) {
-                System.out.println(n);
-
-                // Bodies
-                String bodyCreate = """
+            // Bodies
+            String bodyCreate = """
                         { 
                            "title": "IceCream Man",
                            "description": ""
                         }
                         """;
 
-                String bodyUpdate = """
-                        {
-                            "title": "Updated Project",
-                            "description": "Updated during performance testing"
-                        }
-                        """;
+            for (int n : numObjects) { // Create the N objects (Populate the system with N objects.)
 
                 // ----- Create -----
-                long sCreate = System.nanoTime();
-                for (int i = 0; i < n; i++) {
+                for (int i = 0; i < n - current_number; i++) { // start: n-1 as 1 entry already exists in database when we start it
                     given()
-                            .baseUri(BASE_URL)
-                            .contentType("application/json")
-                            .body(bodyCreate)
-                            .when()
-                            .post("/projects")
-                            .then()
-                            .statusCode(201);
+                        .baseUri(BASE_URL)
+                        .contentType("application/json")
+                        .body(bodyCreate)
+                        .when()
+                        .post("/projects")
+                        .then()
+                        .statusCode(201);
+
                 }
-                double tCreate = ((System.nanoTime() - sCreate) / 1_000_000.0)/n;
-                double cpuCreate = getProcessCpuPercent();
-                long memCreate = getProcessMemoryMB();
 
-                // ----- Edit -----
-                long sEdit = System.nanoTime();
-                for (int i = 0; i < n; i++) {
-                    given()
-                            .baseUri(BASE_URL)
-                            .contentType("application/json")
-                            .body(bodyUpdate)
-                            .put("/projects/" + (i + offset))
-                            .then()
-                            .statusCode(anyOf(is(200), is(201)));
-                }
-                double tEdit = ((System.nanoTime() - sEdit) / 1_000_000.0)/n;
-                double cpuEdit = getProcessCpuPercent();
-                long memEdit = getProcessMemoryMB();
+            current_number = n;
 
-                // ----- Delete -----
-                long sDelete = System.nanoTime();
-                for (int i = 0; i < n; i++) {
-                    given()
-                            .baseUri(BASE_URL)
-                            .delete("/projects/" + (i + offset))
-                            .then()
-                            .statusCode(is(200));
-                }
-                double tDelete = ((System.nanoTime() - sDelete) / 1_000_000.0)/n;
-                double cpuDelete = getProcessCpuPercent();
-                long memDelete = getProcessMemoryMB();
 
-                writer.printf(Locale.US,
-                        "%d,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%d,%d,%d%n",
-                        n,
-                        tCreate, tEdit, tDelete,
-                        cpuCreate, cpuEdit, cpuDelete,
-                        memCreate, memEdit, memDelete
-                );
+            long sCreate = System.nanoTime();
+            // ----- Create -----
+            given()
+                    .baseUri(BASE_URL)
+                    .contentType("application/json")
+                    .body(bodyCreate)
+                    .when()
+                    .post("/projects")
+                    .then()
+                    .statusCode(201);
+            double tCreate = ((System.nanoTime() - sCreate) / 1_000_000.0);
 
-                offset += n;
+            double cpuCreate = getProcessCpuPercent(); // TODO: Check method
+            long memCreate = getProcessMemoryMB();
+
+            // ----- Edit -----
+            String bodyUpdate = """
+                    {
+                        "title": "Updated Project",
+                        "description": "Updated during performance testing"
+                    }
+                    """;
+            long sEdit = System.nanoTime();
+            given()
+                    .baseUri(BASE_URL)
+                    .contentType("application/json")
+                    .body(bodyUpdate)
+                    .put("/projects/" + (to_tamper))// Always edit
+                    .then()
+                    .statusCode(anyOf(is(200), is(201)));
+            double tEdit = ((System.nanoTime() - sEdit) / 1_000_000.0);
+            double cpuEdit = getProcessCpuPercent();
+            long memEdit = getProcessMemoryMB();
+
+            // ----- Delete -----
+            long sDelete = System.nanoTime();
+            given()
+                    .baseUri(BASE_URL)
+                    .delete("/projects/" + (to_tamper))
+                    .then()
+                    .statusCode(is(200));
+            double tDelete = ((System.nanoTime() - sDelete) / 1_000_000.0);
+            double cpuDelete = getProcessCpuPercent();
+            long memDelete = getProcessMemoryMB();
+
+            writer.printf(Locale.US,
+                    "%d,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%d,%d,%d%n",
+                    n,
+                    tCreate, tEdit, tDelete,
+                    cpuCreate, cpuEdit, cpuDelete,
+                    memCreate, memEdit, memDelete
+            )
+            ;
+
+                to_tamper += 1;
+                List<Object> projects =
+                        given()
+                                .baseUri(BASE_URL)
+                                .get("/projects")
+                                .jsonPath()
+                                .getList("projects");
+
+//                System.out.println("Number of project entries = " + projects.size());
+
             }
+
 
         } catch (Exception e) {
             throw new RuntimeException(e);
