@@ -177,13 +177,13 @@ public class ProjectEndpointPerformanceTests {
             ;
 
                 to_tamper += 1;
-                List<Object> projects =
-                        given()
-                                .baseUri(BASE_URL)
-                                .get("/projects")
-                                .jsonPath()
-                                .getList("projects");
-
+//                List<Object> projects =
+//                        given()
+//                                .baseUri(BASE_URL)
+//                                .get("/projects")
+//                                .jsonPath()
+//                                .getList("projects");
+//
 //                System.out.println("Number of project entries = " + projects.size());
 
             }

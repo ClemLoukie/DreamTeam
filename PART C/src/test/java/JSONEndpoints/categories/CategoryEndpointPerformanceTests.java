@@ -87,9 +87,9 @@ public class CategoryEndpointPerformanceTests {
     @Test
     void performanceTestCategories() {
 
-        int[] numObjects = {1, 5, 10, 50, 75, 100, 200, 300, 400, 500, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000}; // always do 1 less
-        int to_tamper = 1; // first added id starts at 2
-        int current_number = 1;
+        int[] numObjects = {2, 5, 10, 50, 75, 100, 200, 300, 400, 500, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000}; // always do 1 less
+        int to_tamper = 2; // first added id starts at 2
+        int current_number = 2;
 
         File csv = new File("CategoryPerformanceResults.csv");
 
@@ -177,13 +177,13 @@ public class CategoryEndpointPerformanceTests {
             ;
 
                 to_tamper += 1;
-                List<Object> categories =
-                        given()
-                                .baseUri(BASE_URL)
-                                .get("/categories")
-                                .jsonPath()
-                                .getList("categories");
-
+//                List<Object> categories =
+//                        given()
+//                                .baseUri(BASE_URL)
+//                                .get("/categories")
+//                                .jsonPath()
+//                                .getList("categories");
+//
 //                System.out.println("Number of category entries = " + categories.size());
 
             }

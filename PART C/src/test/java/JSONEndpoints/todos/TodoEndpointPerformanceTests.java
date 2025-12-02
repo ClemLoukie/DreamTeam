@@ -87,9 +87,9 @@ public class TodoEndpointPerformanceTests {
     @Test
     void performanceTestTodos() {
 
-        int[] numObjects = {1, 5, 10, 50, 75, 100, 200, 300, 400, 500, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000}; // always do 1 less
-        int to_tamper = 1; // first added id starts at 2
-        int current_number = 1;
+        int[] numObjects = {2, 5, 10, 50, 75, 100, 200, 300, 400, 500, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000}; // always do 1 less
+        int to_tamper = 2; // first added id starts at 2
+        int current_number = 2;
 
         File csv = new File("TodoPerformanceResults.csv");
 
@@ -121,7 +121,6 @@ public class TodoEndpointPerformanceTests {
                 }
 
             current_number = n;
-
 
             long sCreate = System.nanoTime();
             // ----- Create -----
@@ -179,13 +178,13 @@ public class TodoEndpointPerformanceTests {
             ;
 
                 to_tamper += 1;
-                List<Object> todos =
-                        given()
-                                .baseUri(BASE_URL)
-                                .get("/todos")
-                                .jsonPath()
-                                .getList("todos");
-
+//                List<Object> todos =
+//                        given()
+//                                .baseUri(BASE_URL)
+//                                .get("/todos")
+//                                .jsonPath()
+//                                .getList("todos");
+//
 //                System.out.println("Number of todo entries = " + todos.size());
 
             }
